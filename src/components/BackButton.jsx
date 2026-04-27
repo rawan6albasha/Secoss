@@ -1,16 +1,29 @@
-import { useNavigate } from 'react-router-dom'
+// src/components/ui/BackButton/BackButton.jsx
+import { useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa";
-const BackButton = () => {
-  const navigate = useNavigate()
+import { useTranslation } from 'react-i18next';
+
+const BackButton = ({ label, labelKey, className = '' }) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation(); // ✅ إذا احتجت لترجمة
 
   return (
     <button
       onClick={() => navigate(-1)}
-      className=" text-accentBg  text-4xl hover:text-accent"
-    > {/* mb-4 px-4 py-2 */}
+      className={`
+        p-3 rounded-xl text-2xl 
+        text-gray-400 hover:text-brand-primary 
+        hover:bg-gray-100 dark:hover:bg-gray-800
+        transition-all duration-200
+        focus:outline-none focus:ring-2 focus:ring-brand-secondary/40
+        ${className}
+      `}
+      aria-label={labelKey ? t(labelKey) : label || 'الرجوع'}
+      title={labelKey ? t(labelKey) : label || 'الرجوع'}
+    >
       <FaArrowRight />
     </button>
-  )
-}
+  );
+};
 
-export default BackButton
+export default BackButton;

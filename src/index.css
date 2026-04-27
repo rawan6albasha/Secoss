@@ -1,31 +1,218 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-  direction: rtl;
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Tajawal', sans-serif;
+  }
+  
+  body {
+    @apply bg-[#f8fafc] text-gray-900 overflow-x-hidden;
+  }
 }
 
+@layer components {
+  /* تحسين الـ Buttons عشان تكون جذابة ومو باهتة */
+  .btn-primary {
+    @apply px-6 py-3 bg-brand-primary text-white rounded-2xl font-black text-sm 
+           transition-all duration-300 shadow-brand hover:shadow-brand-hover 
+           hover:-translate-y-0.5 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-brand-light text-brand-primary rounded-2xl font-black text-sm 
+           transition-all duration-300 hover:bg-brand-secondary/30;
+  }
+
+  .input-field {
+    @apply w-full px-5 py-3 rounded-2xl bg-white border border-gray-100 
+           text-sm outline-none focus:border-brand-primary focus:ring-4 
+           focus:ring-brand-primary/5 transition-all shadow-sm;
+  }
+}
+/* === Animations للتعليقات === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* === تحسينات فيسبوك ستايل === */
+.comments-facebook {
+  --fb-bg: #f0f2f5;
+  --fb-text: #050505;
+  --fb-text-secondary: #65676b;
+  --fb-primary: #1877f2;
+  --fb-primary-hover: #166fe5;
+  --fb-border: #ced0d4;
+}
+
+.comments-facebook .comment-box {
+  background: var(--fb-bg);
+  border-radius: 18px;
+  transition: background-color 0.15s;
+}
+
+.comments-facebook .comment-box:hover {
+  background: #e4e6eb;
+}
+
+.comments-facebook .action-btn {
+  color: var(--fb-text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: all 0.15s;
+}
+
+.comments-facebook .action-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--fb-text);
+}
+
+.comments-facebook .action-btn.active {
+  color: var(--fb-primary);
+  background: rgba(24, 119, 242, 0.1);
+}
+
+/* === تحسينات RTL === */
+.rtl .reply-thread {
+  border-right: 2px solid #e4e6eb;
+  border-left: none;
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+.ltr .reply-thread {
+  border-left: 2px solid #e4e6eb;
+  border-right: none;
+  padding-left: 1.5rem;
+  padding-right: 0;
+}
+
+/* في index.css أو App.css */
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(8px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out;
+}
+
+/* تحسينات إضافية للتعليقات */
+.comment-box {
+  transition: all 0.2s ease-in-out;
+}
+
+.comment-box:hover {
+  transform: translateY(-1px);
+}
+
+/* تحسينات RTL */
+.rtl .reply-thread {
+  margin-right: 3rem;
+  margin-left: 0;
+  border-right: 2px solid #e5e7eb;
+  border-left: none;
+  padding-right: 1.5rem;
+}
+
+.ltr .reply-thread {
+  margin-left: 3rem;
+  margin-right: 0;
+  border-left: 2px solid #e5e7eb;
+  border-right: none;
+  padding-left: 1.5rem;
+}
+
+/* تحسينات للأزرار */
+.action-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-button:hover {
+  transform: translateY(-1px);
+}
+
+.action-button:active {
+  transform: translateY(0);
+}
+
+/* ✅ منع القص على الحاويات الأب */
+.post-detail-container,
+.article,
+main,
 body {
-  margin: 0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
-  direction: rtl;
-  text-align: right;
+  overflow: visible !important;
 }
 
-* {
-  box-sizing: border-box;
+/* ✅ التأكد من أن القائمة بتظهر فوق كل شي */
+.action-menu-dropdown {
+  overflow: visible !important;
+}
+/* دعم الاتجاهات */
+[dir="rtl"] { text-align: right; }
+[dir="ltr"] { text-align: left; }
+/* في نهاية ملف index.css */
+
+/* === ضمان ظهور أيقونة ActionMenu === */
+.action-menu-trigger {
+  color: #6B7280 !important; /* gray-500 */
 }
 
-img {
-  display: block;
-  max-width: 100%;
+.action-menu-trigger:hover {
+  color: #374151 !important; /* gray-700 */
 }
-/* global.css */
-.mask-gradient {
-  -webkit-mask-image: linear-gradient(to top, black 60%, transparent 100%);
-  mask-image: linear-gradient(to top, black 60%, transparent 100%);
+
+.action-menu-trigger svg,
+.action-menu-trigger svg * {
+  color: #6B7280 !important;
+  fill: #6B7280 !important;
+}
+
+.action-menu-trigger:hover svg,
+.action-menu-trigger:hover svg * {
+  color: #374151 !important;
+  fill: #374151 !important;
+}
+
+/* === Animation === */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-8px) scale(0.98); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.15s ease-out;
+}
+
+/* === منع القص === */
+.action-menu-container,
+.post-detail-container,
+article,
+main {
+  overflow: visible !important;
 }

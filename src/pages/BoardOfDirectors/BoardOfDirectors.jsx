@@ -1,73 +1,502 @@
-import { useSelector } from 'react-redux'
-import SectionHeader from '../../components/ui/SectionHeader'
-import BackButton from '../../components/BackButton'
-import Tag from '../../components/ui/Tag'
-import logo from '../../assets/logo1.png' // ضع اللوجو المناسب هنا
+// src/pages/BoardOfDirectors/BoardOfDirectors.jsx
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  FaEdit, FaTrash, FaPlus, FaSave, FaTimes, 
+  FaUsers, FaImages, FaMoon, FaSun 
+} from 'react-icons/fa';
+
+// === Redux ===
+import { addBoard, updateBoard, deleteBoard } from '../../store/slices/boardSlice';
+
+// === مكونات واجهة المستخدم المشتركة ✅ ===
+import SectionHeader from '../../components/ui/SectionHeader';
+import BackButton from '../../components/BackButton';
+import Tag from '../../components/ui/Tag';
+import ImageCarousel from '../../components/ui/ImageCarousel';
+import ImageUploader from '../../components/ui/ImageUploader';
+import LocalizedContentInput from '../../components/ui/LocalizedContentInput';
+import EditableWrapper from '../../components/ui/EditableWrapper';
+
+// === أدوات ===
+import { getLocalizedText } from '../../utils/i18n-helpers';
+import { SITE_CONFIG } from '../../config/siteConfig';
+import { useTheme } from '../../context/ThemeContext';
 
 const BoardOfDirectors = () => {
-  const { boards } = useSelector(state => state.board)
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const { isDark, toggleTheme } = useTheme();
+  
+  const { boards, loading, error } = useSelector(state => state.board);
+  const user = useSelector(state => state.user?.user);
+  const isAdmin = user?.role === 'ADMIN';
 
-  const staticInfo = "جمعية العلوم الاقتصادية السورية - عضو اتحاد الاقتصاديين العرب - Society Syrian Economic Sciences - Economists Union Member of The Arab"
+  const currentLang = i18n.language || 'ar';
+  const isRTL = currentLang === 'ar';
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeBoard, setActiveBoard] = useState(null);
+
+  // ✅ ضمان أن boards مصفوفة دائماً
+  const safeBoards = useMemo(() => {
+    if (!boards) return [];
+    if (!Array.isArray(boards)) return [];
+    return boards;
+  }, [boards]);
+
+  // === معالجة الحفظ ===
+  const handleSave = useCallback(() => {
+    if (activeBoard?.id) {
+      dispatch(updateBoard({ id: activeBoard.id, updatedData: activeBoard }));
+      setIsEditing(false);
+      setActiveBoard(null);
+    }
+  }, [dispatch, activeBoard]);
+
+  // === إضافة مجلس جديد ===
+  const handleAddNew = useCallback(() => {
+    const newBoard = {
+      id: Date.now(),
+      year: { ar: '2024-2026', en: '2024-2026' },
+      period: { 
+        ar: currentLang === 'ar' ? 'الدورة الجديدة' : 'New Term',
+        en: currentLang === 'ar' ? 'New Term' : 'الدورة الجديدة'
+      },
+      president: { ar: '', en: '' },
+      vicePresident: { ar: '', en: '' },
+      secretary: { ar: '', en: '' },
+      treasurer: { ar: '', en: '' },
+      members: [],
+      images: []
+    };
+    dispatch(addBoard(newBoard));
+  }, [dispatch, currentLang]);
+
+  // === أنيميشن العناصر ===
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  };
 
   return (
-    <section className="py-10 px-4 sm:px-6 lg:px-8" dir="rtl">
-      <div className="space-y-10">
+    <section 
+      dir={isRTL ? 'rtl' : 'ltr'}
+      className={`
+        py-6 px-4 sm:px-6 lg:px-18 min-h-screen transition-colors duration-300
+        ${isDark ? 'bg-gray-900' : 'bg-background'}
+      `}
+    >
+      <div className="max-w-7xl mx-auto space-y-3">
+        <BackButton />
+        
+        {/* === Header Section === */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className={`
+            flex flex-col lg:flex-row items-center justify-between gap-8 
+            p-8 rounded-[2.5rem] border shadow-soft relative overflow-hidden
+            ${isDark 
+              ? 'bg-gray-800/50 border-gray-700' 
+              : 'bg-surface border-slate-200'
+            }
+          `}
+        >
 
-        {/* Header + Logo +زر الرجوع */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-right">
-          <div className="space-y-4">
-          <div className='flex justify-start items-baseline gap-6'>
-           <BackButton />
-            <SectionHeader
-              eyebrow="مجلس الإدارة"
-              title="أسماء أعضاء مجالس الإدارة في تاريخ الجمعية"
-              description="عرض لمجالس الإدارة في جمعية العلوم الاقتصادية السورية حسب السنوات."
-            />
-            </div>
-            {/* Static info */}
-            <div className="rounded-2xl bg-slate-50/80 shadow-sm p-4 sm:p-6 text-slate-700 text-base sm:text-lg leading-relaxed">
-              {staticInfo}
-            </div>
-          </div>
-
-          <img
-            src={logo}
-            alt="شعار الجمعية"
-            className="w-40 h-auto sm:w-48"
+          <SectionHeader 
+            pageKey="boardOfDirectors"
+            section="header"
+            editable={isAdmin}
+            className="mb-6 space-y-6 flex-1 z-10"
           />
-        </div>
+          
+          {/* شعار الجمعية */}
+          <img 
+            src={SITE_CONFIG.identity.logo} 
+            alt={SITE_CONFIG.identity.name[currentLang]} 
+            className={`
+              w-36 lg:w-40 h-auto opacity-90 drop-shadow-sm z-10 transition-transform
+              hover:scale-105
+            `}
+          />
+        </motion.div>
 
-  
-       
-
-        {/* قائمة مجالس الإدارة */}
-        <div className="space-y-10">
-          {boards.map((board, idx) => (
-            <div
-              key={idx}
-              className="rounded-[2rem] bg-white/90 border border-accent shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm p-8 sm:p-12 space-y-6"
+        {/* === زر إضافة مجلس جديد === */}
+        {isAdmin && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-center"
+          >
+            <button 
+              onClick={handleAddNew} 
+              className={`
+                flex items-center gap-3 px-8 py-4 rounded-full 
+                font-bold transition-all duration-200 shadow-lg active:scale-95
+                bg-brand-secondary text-white hover:bg-brand-secondaryHover
+              `}
             >
-              <h2 className="text-3xl sm:text-4xl font-bold text-accent">{board.year}</h2>
-              <p className="text-sm sm:text-base text-accentSoft">{board.period}</p>
+              <FaPlus /> {t(SITE_CONFIG.board.actions.addNew)}
+            </button>
+          </motion.div>
+        )}
 
-              <div className="space-y-3 text-right text-slate-700">
-                <p className="text-base sm:text-lg"><span className="font-semibold">الرئيس:</span> {board.president}</p>
-                <p className="text-base sm:text-lg"><span className="font-semibold">نائب الرئيس:</span> {board.vicePresident}</p>
-                <p className="text-base sm:text-lg"><span className="font-semibold">أمين السر:</span> {board.secretary}</p>
-                <p className="text-base sm:text-lg"><span className="font-semibold">أمين الصندوق:</span> {board.treasurer}</p>
-                <p className="font-semibold text-base sm:text-lg">الأعضاء:</p>
-                <div className="flex flex-wrap gap-2">
-                  {board.members.map((member, i) => (
-                    <Tag key={i} variant="accent">{member}</Tag>
-                  ))}
+        {/* === حالة التحميل === */}
+        {loading && (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-brand-secondary border-t-transparent" />
+          </div>
+        )}
+
+        {/* === حالة الخطأ === */}
+        {error && !loading && (
+          <div className={`
+            p-4 rounded-xl text-center
+            ${isDark ? 'bg-red-900/30 text-red-300' : 'bg-red-50 text-red-600'}
+          `}>
+            <p className="font-bold">⚠️ {error}</p>
+            <button 
+              onClick={() => dispatch({ type: 'board/setError', payload: null })}
+              className="mt-2 text-sm underline hover:no-underline"
+            >
+              {t('common.retry') || 'إعادة المحاولة'}
+            </button>
+          </div>
+        )}
+
+        {/* === قائمة مجالس الإدارة === */}
+        {!loading && !error && (
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 gap-8"
+          >
+            {safeBoards.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={`
+                  text-center py-16 rounded-2xl border-2 border-dashed
+                  ${isDark ? 'border-gray-700 text-gray-400' : 'border-slate-200 text-slate-400'}
+                `}
+              >
+                <FaUsers size={40} className="mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-bold mb-2">
+                  {t(SITE_CONFIG.board.labels.emptyList) || 'لا توجد مجالس مسجلة حالياً'}
+                </p>
+                <p className="text-sm mb-4">
+                  {isAdmin 
+                    ? t(SITE_CONFIG.board.labels.emptyListAdmin) || 'اضغط على "إضافة مجلس جديد" للبدء'
+                    : t(SITE_CONFIG.board.labels.emptyListUser) || 'سيتم عرض المجالس هنا عند إضافتها'
+                  }
+                </p>
+              </motion.div>
+            ) : (
+              safeBoards.map((board) => (
+                <EditableWrapper
+                  key={board.id}
+                  isAdmin={isAdmin}
+                  onEdit={() => { setActiveBoard(board); setIsEditing(true); }}
+                  className="group relative rounded-[2.5rem] p-6 md:p-8 border shadow-soft hover:shadow-xl transition-all duration-500"
+                  editButtonPosition="top-end"
+                >
+                  <div className={`
+                    ${isDark 
+                      ? 'bg-gray-800 border-gray-700 hover:border-brand-secondary/30' 
+                      : 'bg-white border-slate-100 hover:border-brand-secondary/20'
+                    }
+                  `}>
+                    {/* أزرار الحذف (للمشرفين) */}
+                    {isAdmin && (
+                      <div className={`
+                        absolute ${isRTL ? 'right-16' : 'left-16'} top-4 
+                        flex gap-2 z-20 opacity-0 group-hover:opacity-100 
+                        transition-opacity duration-200
+                      `}>
+                        <button 
+                          onClick={() => dispatch(deleteBoard(board.id))} 
+                          className={`
+                            p-2.5 rounded-xl transition-all duration-200
+                            ${isDark 
+                              ? 'bg-red-900/30 text-red-400 hover:bg-red-600 hover:text-white' 
+                              : 'bg-red-50 text-red-600 hover:bg-red-600 hover:text-white'
+                            }
+                          `}
+                          title={t(SITE_CONFIG.board.actions.delete)}
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* التخطيط الرئيسي */}
+                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                      
+                      {/* === قسم الصور === */}
+                      <div className="w-full lg:w-2/5 xl:w-1/3">
+                        {(board.images?.length ?? 0) > 0 ? (
+                          <div className={`
+                            rounded-[2rem] overflow-hidden shadow-md border aspect-[4/3] relative
+                            ${isDark ? 'border-gray-700 bg-gray-700' : 'border-slate-50 bg-white'}
+                          `}>
+                            <ImageCarousel 
+                              items={(board.images || []).map(img => ({ imageUrl: img }))} 
+                              SlideComponent={({ imageUrl }) => (
+                                <img src={imageUrl} className="w-full h-full object-cover" alt="board activity" />
+                              )}
+                            />
+                          </div>
+                        ) : (
+                          <div className={`
+                            w-full aspect-[4/3] rounded-[2rem] 
+                            flex flex-col items-center justify-center 
+                            border-2 border-dashed
+                            ${isDark ? 'bg-gray-700/30 border-gray-600 text-gray-500' : 'bg-slate-50 border-slate-200 text-slate-300'}
+                          `}>
+                            <FaImages size={30} className="mb-2" />
+                            <span className="text-xs font-medium">{t(SITE_CONFIG.board.labels.noImages)}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* === قسم البيانات === */}
+                      <div className="flex-1 w-full space-y-6">
+                        {/* رأس البطاقة */}
+                        <div className={`pb-4 border-b ${isDark ? 'border-gray-700' : 'border-slate-50'}`}>
+                          <Tag variant="accent" className="mb-3 px-4 py-1.5">
+                            <FaUsers className="inline me-1" /> {t(SITE_CONFIG.board.header.titleKey)}
+                          </Tag>
+                          <h2 className={`
+                            text-2xl md:text-3xl font-black tracking-tight leading-none mb-2
+                            ${isDark ? 'text-white' : 'text-slate-800'}
+                          `}>
+                            {getLocalizedText(board.year, currentLang)}
+                          </h2>
+                          <p className="text-brand-secondary font-bold text-sm">
+                            {getLocalizedText(board.period, currentLang)}
+                          </p>
+                        </div>
+
+                        {/* شبكة المعلومات - باستخدام مكون مشترك قابل لإعادة الاستخدام */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {[
+                            { label: SITE_CONFIG.board.labels.president, value: board.president, isMain: true },
+                            { label: SITE_CONFIG.board.labels.vicePresident, value: board.vicePresident },
+                            { label: SITE_CONFIG.board.labels.secretary, value: board.secretary },
+                            { label: SITE_CONFIG.board.labels.treasurer, value: board.treasurer },
+                          ].map((field, i) => (
+                            <motion.div
+                              key={i}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: i * 0.05 }}
+                              className={`
+                                p-4 rounded-2xl border transition-all duration-200
+                                ${isDark 
+                                  ? 'bg-gray-800/50 border-gray-700 hover:border-brand-secondary/50' 
+                                  : 'bg-slate-50/50 border-slate-100 hover:border-brand-secondary/30'
+                                }
+                              `}
+                            >
+                              <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.15em] mb-1">
+                                {t(field.label)}
+                              </p>
+                              <p className={`
+                                text-sm md:text-base font-bold transition-colors
+                                ${field.isMain ? 'text-brand-secondary' : (isDark ? 'text-gray-200' : 'text-slate-700')}
+                              `}>
+                                {getLocalizedText(field.value, currentLang) || '---'}
+                              </p>
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        {/* الأعضاء */}
+                        {(board.members?.length ?? 0) > 0 && (
+                          <div className="pt-4">
+                            <p className={`
+                              text-[9px] font-black uppercase tracking-widest mb-3
+                              ${isDark ? 'text-gray-500' : 'text-slate-400'}
+                            `}>
+                              {t(SITE_CONFIG.board.labels.members)}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {(board.members || []).map((member, i) => (
+                                <Tag key={i} variant="accentSoft" className="px-4 py-1.5 text-sm rounded-lg shadow-sm">
+                                  {getLocalizedText(member, currentLang)}
+                                </Tag>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </EditableWrapper>
+              ))
+            )}
+          </motion.div>
+        )}
+
+        {/* === Modal التعديل (للمشرفين) === */}
+        <AnimatePresence>
+          {isEditing && activeBoard && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4"
+              onClick={() => setIsEditing(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className={`
+                  w-full max-w-4xl rounded-[2.5rem] p-6 md:p-8 shadow-2xl 
+                  max-h-[90vh] overflow-y-auto
+                  ${isDark ? 'bg-gray-800' : 'bg-white'}
+                `}
+              >
+                {/* رأس المودال */}
+                <div className={`flex justify-between items-center mb-6 pb-4 border-b ${isDark ? 'border-gray-700' : 'border-slate-100'}`}>
+                  <h2 className={`
+                    text-xl font-black flex items-center gap-3
+                    ${isDark ? 'text-white' : 'text-slate-800'}
+                  `}>
+                    <FaEdit className="text-brand-secondary" /> 
+                    {t(SITE_CONFIG.board.actions.edit)}
+                  </h2>
+                  <button 
+                    onClick={() => setIsEditing(false)} 
+                    className={`
+                      p-2 rounded-xl transition-colors
+                      ${isDark ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'}
+                    `}
+                  >
+                     <FaEdit size={16} />
+                  </button>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* إدارة الصور */}
+                  <div className="space-y-4">
+                    <label className={`block text-sm font-bold ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                      {t('board.images') || 'الصور'}
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {(activeBoard.images || []).map((img, idx) => (
+                        <div key={idx} className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600">
+                          <img src={img} className="w-full h-full object-cover" alt={`board-${idx}`} />
+                          <button 
+                            onClick={() => {
+                              const newImages = (activeBoard.images || []).filter((_, i) => i !== idx);
+                              setActiveBoard({...activeBoard, images: newImages});
+                            }}
+                            className="absolute inset-0 bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
+                          >
+                            <FaTrash size={14} />
+                          </button>
+                        </div>
+                      ))}
+                      <ImageUploader 
+                        onUpload={(data) => setActiveBoard({
+                          ...activeBoard, 
+                          images: [...(activeBoard.images || []), data]
+                        })} 
+                        labelKey={SITE_CONFIG.board.actions.addImage}
+                      />
+                    </div>
+                  </div>
+{/* حقول النص ثنائية اللغة - باستخدام المكون المشترك ✅ */}
+<div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+  <LocalizedContentInput 
+    label={t(SITE_CONFIG.board.labels.year)}
+    value={activeBoard.year}
+    onChange={(val) => setActiveBoard(prev => ({ ...prev, year: val }))}
+    placeholder={{ 
+      ar: t('board.placeholders.year'), 
+      en: t('board.placeholders.yearEn') 
+    }}
+  />
+  <LocalizedContentInput 
+    label={t(SITE_CONFIG.board.labels.president)}
+    value={activeBoard.president}
+    onChange={(val) => setActiveBoard(prev => ({ ...prev, president: val }))}
+    placeholder={{ 
+      ar: t('board.placeholders.president'), 
+      en: t('board.placeholders.presidentEn') 
+    }}
+  />
+  <LocalizedContentInput 
+    label={t(SITE_CONFIG.board.labels.vicePresident)}
+    value={activeBoard.vicePresident}
+    onChange={(val) => setActiveBoard(prev => ({ ...prev, vicePresident: val }))}
+  />
+  <LocalizedContentInput 
+    label={t(SITE_CONFIG.board.labels.secretary)}
+    value={activeBoard.secretary}
+    onChange={(val) => setActiveBoard(prev => ({ ...prev, secretary: val }))}
+  />
+  <LocalizedContentInput 
+    label={t(SITE_CONFIG.board.labels.treasurer)}
+    value={activeBoard.treasurer}
+    onChange={(val) => setActiveBoard(prev => ({ ...prev, treasurer: val }))}
+  />
+  
+  {/* الأعضاء - مصفوفة مع إعادة ترتيب ✅ */}
+  <div className="md:col-span-2">
+    <LocalizedContentInput 
+      label={t(SITE_CONFIG.board.labels.members)}
+      value={activeBoard.members}
+      onChange={(val) => setActiveBoard(prev => ({ ...prev, members: val }))}
+      mode="array"
+      showReorder={true}
+      placeholder={{ 
+        ar: t('board.placeholders.member'), 
+        en: t('board.placeholders.memberEn') 
+      }}
+    />
+  </div>
+</div>
+                </div>
+
+                {/* أزرار الحفظ */}
+                <div className={`flex justify-end gap-3 mt-8 pt-6 border-t ${isDark ? 'border-gray-700' : 'border-slate-100'}`}>
+                  <button 
+                    onClick={() => setIsEditing(false)} 
+                    className={`
+                      px-6 py-2.5 rounded-xl font-bold transition-colors
+                      ${isDark ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'}
+                    `}
+                  >
+                    {t(SITE_CONFIG.board.actions.cancel)}
+                  </button>
+                  <button 
+                    onClick={handleSave} 
+                    className="flex items-center gap-2 px-8 py-2.5 bg-brand-secondary text-white rounded-xl shadow-lg font-bold hover:bg-brand-secondaryHover transition-all"
+                  >
+                    <FaSave /> {t(SITE_CONFIG.board.actions.save)}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default BoardOfDirectors
+export default BoardOfDirectors;

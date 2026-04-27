@@ -1,3 +1,4 @@
+//src/i18n/index.js
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import i18nextXHRBackend from 'i18next-xhr-backend';

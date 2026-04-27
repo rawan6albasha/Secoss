@@ -1,13 +1,17 @@
-import React from 'react';
+// src/components/RBAC/PermissionGate.jsx
+import PERMISSIONS from './../../config/permissions'; // ✅ بالفعل يستخدم المركزي
 
-const PermissionGate = ({ permissions, requiredPermission, children }) => {
-    const hasPermission = permissions.includes(requiredPermission);
+const PermissionGate = ({ requiredPermission, children, fallback = null }) => {
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
 
-    if (!hasPermission) {
-        return <div>You do not have permission to view this content.</div>;
-    }
+    const hasPermission = PERMISSIONS.checkPermission(
+        user?.role, 
+        requiredPermission, 
+        user?.extraPermissions || []
+    );
 
+    if (!hasPermission) return fallback;
     return <>{children}</>;
 };
-
-export default PermissionGate;
+export default PermissionGate

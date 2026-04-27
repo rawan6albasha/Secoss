@@ -8,14 +8,15 @@ const axiosInstance = axios.create({
   },
 })
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
+// داخل axiosInstance.js
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-)
+  return config;
+});
+
 
 axiosInstance.interceptors.response.use(
   (response) => {

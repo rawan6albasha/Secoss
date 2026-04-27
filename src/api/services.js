@@ -2,50 +2,53 @@
 
 // Auth Service
 export const authService = {
-    login: async (credentials) => {
-        // Logic for user login
-    },
-    register: async (userData) => {
-        // Logic for user registration
-    },
+    login: async (credentials) => { /* ... */ },
+    register: async (userData) => { /* ... */ },
+    // الحصول على بيانات البروفايل لأي مستخدم (عضو، محاضر، أدمن)
+    getProfile: async (userId) => {
+        // الاستعلام عن بيانات المستخدم + منشوراته (المقبولة فقط للعامة)
+    }
 };
 
-// Users Service
-export const usersService = {
-    getUsers: async () => {
-        // Logic to get all users
+// Content Service (Lectures & Articles)
+// ملاحظة: استخدمنا FormData لدعم رفع ملفات الـ PDF والصور
+export const contentService = {
+    // 1. للمستخدم (العضو): إرسال منشور جديد للمراجعة
+    submitForReview: async (formData) => {
+        // formData سيحتوي على: title, summary, file(PDF/Image), type(lecture/article)
+        // الحالة الافتراضية في السيرفر ستكون 'pending'
     },
-    getUserById: async (id) => {
-        // Logic to get user by ID
+
+    // 2. للمستخدم: جلب منشوراته الخاصة (لمتابعة حالة القبول/الرفض)
+    getMySubmissions: async (userId) => {
+        // جلب المنشورات بجميع حالاتها (pending, approved, rejected)
     },
+
+    // 3. للأدمن: جلب طلبات المراجعة المعلقة فقط
+    getPendingItems: async () => {
+        // Fetch items where status === 'pending'
+    },
+
+    // 4. للأدمن: اتخاذ قرار (قبول أو رفض)
+    reviewSubmission: async (id, decision) => {
+        // decision: { status: 'approved' } 
+        // OR { status: 'rejected', reason: 'المحتوى غير كافي' }
+    }
 };
 
-// News Service
-export const newsService = {
-    getAllNews: async () => {
-        // Logic to get all news articles
-    },
-    getNewsById: async (id) => {
-        // Logic to get news article by ID
-    },
-};
-
-// Lectures Service
+// Lectures Service (العرض العام)
 export const lecturesService = {
-    getAllLectures: async () => {
-        // Logic to get all lectures
+    getAllApproved: async () => {
+        // جلب المحاضرات التي تم قبولها فقط للعرض في الصفحة العامة
     },
-    getLectureById: async (id) => {
-        // Logic to get lecture by ID
-    },
+    getLectureById: async (id) => { /* ... */ },
 };
 
-// Events Service
-export const eventsService = {
-    getAllEvents: async () => {
-        // Logic to get all events
+// Notification Service (للأدمن والأعضاء)
+export const notificationService = {
+    getNotifications: async (userId) => {
+        // للأدمن: "هناك منشور جديد ينتظر المراجعة"
+        // للعضو: "تم رفض/قبول منشورك لسبب كذا..."
     },
-    getEventById: async (id) => {
-        // Logic to get event by ID
-    },
+    markAsRead: async (notificationId) => { /* ... */ }
 };

@@ -1,54 +1,142 @@
-export default {
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+// // tailwind.config.js
+// export default {
+//   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+//   darkMode: "class", // أو 'media' حسب حاجتك
+//   theme: {
+//     extend: {
+//       // === 🎨 ألوان الهوية البصرية ===
+//       colors: {
+//         brand: {
+//           primary: "#0201fb", // أزرق غامق - اللون الرئيسي
+//           secondary: "#84fdff", // سماوي فاتح - اللون الثانوي
+//           // مشتقات مفيدة
+//           primaryHover: "#0100d1",
+//           secondaryHover: "#5dfbff",
+//           light: "#84fdff20", // شفافية 12% للخلفيات
+//         },
+//         // ألوان حالة (يمكن تعديلها لتتناسب مع الهوية)
+//         success: "#22c55e",
+//         warning: "#f59e0b",
+//         error: "#ef4444",
+//       },
 
+//       // === 🔤 الخطوط ===
+//       fontFamily: {
+//       sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
+//       arabic: ['Tajawal', 'Cairo', 'sans-serif'], // ✅ ستعمل تلقائياً مع جوجل فونتس
+//       },
+
+//       // === 📏 المسافات (إضافة إذا احتجت قيم مخصصة) ===
+//       spacing: {
+//         18: "4.5rem",
+//         22: "5.5rem",
+//         // ... إلخ
+//       },
+
+//       // === 🔄 الانتقالات ===
+//       transitionDuration: {
+//         150: "150ms",
+//         300: "300ms",
+//       },
+//       transitionTimingFunction: {
+//         "in-out": "cubic-bezier(0.4, 0, 0.2, 1)",
+//       },
+
+//       // === 🎭 تأثيرات إضافية ===
+//       boxShadow: {
+//         brand: "0 4px 14px rgba(2, 1, 251, 0.15)",
+//         "brand-hover": "0 8px 24px rgba(2, 1, 251, 0.25)",
+//       },
+//       borderRadius: {
+//         "4xl": "2rem",
+//       },
+//       minHeight: { "60vh": "60vh" },
+//     },
+//   },
+//   plugins: [
+//     // يمكن إضافة @tailwindcss/forms أو @tailwindcss/typography هنا
+//     require("@tailwindcss/forms"),
+//     require("@tailwindcss/typography"),
+//   ],
+// };
+// tailwind.config.js
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
+      // === 🎨 ألوان هوية الجمعية الخيرية ===
       colors: {
-        // 🎯 Base (هادئة)
-        background: "#f8fafc",
-        surface: "#ffffff",
-
-        textPrimary: "#1f2937",
-        textSecondary: "#6b7280",
-
-        // 💠 Accent (ألوانك - استخدام خفيف)
-        accent: "#1718e1",
-        accentBg: "rgb(63 63 255 / 36%)",
-
-        accentSoft: "rgb(7 205 205)",
-        accentSoftBg: "#84feff66",
-      },
-
-      boxShadow: {
-        // كارد عادي
-        card: "0 4px 12px rgba(0,0,0,0.05)",
-
-        // 🔥 هوفر ثابت (المهم)
-        cardHover: "0 10px 30px accentSoftBg",
-
-        // خفيف
-        soft: "0 2px 8px rgba(0,0,0,0.04)",
-      },
-
-      borderRadius: {
-        xl2: "1rem",
-        xl3: "1.5rem",
-      },
-
-      transitionTimingFunction: {
-        smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
-      },
-      keyframes: {
-        fadeUp: {
-          "0%": { opacity: 0, transform: "translateY(40px)" },
-          "100%": { opacity: 1, transform: "translateY(0)" },
+        brand: {
+          primary: "#1E40AF", 
+          primaryHover: "#1E3A8A",
+          secondary: "#5dfbff",    
+          secondaryHover: "#84fdff",
+          accent: "#F59E0B",      
+          light: "#EFF6FF",      
+          soft: "#DBEAFE", 
+              textSecondary: '#9CA3AF',
+    surface: 'rgba(255, 255, 255, 0.1)',
+    accent: '#10B981',
+    accentSoft: '#34D399',
+    sparkle1: '#60A5FA',
+    sparkle2: '#A78BFA',
+    sparkle3: '#F472B6',        
         },
+        // ألوان الحالة مع أسماء واضحة
+        success: "#22C55E",
+        warning: "#F59E0B", 
+        error: "#EF4444",
+        info: "#3B82F6",
       },
-      animation: {
-        fadeUp: "fadeUp 0.8s ease forwards",
+
+
+      
+
+      // === 🔤 الخطوط - دعم العربية والإنجليزية ===
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        arabic: ['Tajawal', 'Cairo', 'Noto Sans Arabic', 'sans-serif'],
+      },
+      
+
+      // === 📏 تحسينات المسافات والحدود ===
+      spacing: {
+        18: "4.5rem",
+        22: "5.5rem",
+        88: "22rem",
+      },
+      borderRadius: {
+        '4xl': '2rem',
+        '5xl': '2.5rem',
+      },
+
+      // === 🎭 تأثيرات الظل والحركة ===
+      boxShadow: {
+        'soft': '0 2px 8px rgba(0, 0, 0, 0.04)',
+        'brand': '0 4px 20px rgba(30, 64, 175, 0.12)',
+        'brand-hover': '0 8px 30px rgba(30, 64, 175, 0.2)',
+        'card': '0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1)',
+      },
+      
+      // === 🔄 تحسينات الحركة ===
+      transitionTimingFunction: {
+        'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      
+      transitionDuration: {
+        '150': '150ms',
+        '300': '300ms',
+        '500': '500ms',
       },
     },
   },
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    // إضافة دعم RTL إذا لزم
+    // require('tailwindcss-rtl'),
+  ],
+}
 
-  plugins: [],
-};
+

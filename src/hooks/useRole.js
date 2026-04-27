@@ -1,14 +1,11 @@
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Adjust the path accordingly
+import useAuth from './useAuth'; // استيراد الهوك الذي أنشأناه سابقاً
 
 const useRole = (requiredRole) => {
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth(); // استخدام الهوك لجلب بيانات المستخدم
     
-    if (!user || !user.roles) {
-        return false;
-    }
-
-    return user.roles.includes(requiredRole);
+    // فحص ذكي: إذا لم يكن هناك مستخدم، يرجع false
+    // إذا وجد مستخدم، يقارن دوره بالدور المطلوب
+    return user?.role === requiredRole; 
 };
 
 export default useRole;
