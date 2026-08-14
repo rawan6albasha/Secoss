@@ -44,7 +44,7 @@ const LoginPage = () => {
                     <input className="w-full border p-2 rounded-lg" type="password" id="password" name="password" required />
                 </div>
                 <button 
-                    className="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700 transition"
+                    className="w-full bg-brand-secondary text-white py-2 rounded-lg hover:bg-brand-secondaryHover transition"
                     type="submit"
                 >
                     دخول (قريباً)

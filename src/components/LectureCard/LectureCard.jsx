@@ -244,7 +244,7 @@ const LectureCard = ({ lecture, onBookmark, isBookmarked = false }) => {
             </motion.span>
             <motion.span 
               whileHover={{ scale: 1.1 }}
-              className={`flex items-center gap-1.5 transition-colors cursor-default ${isDark ? 'hover:text-green-400' : 'hover:text-emerald-500'}`} 
+              className={`flex items-center gap-1.5 transition-colors cursor-default ${isDark ? 'hover:text-brand-secondary' : 'hover:text-brand-secondary'}`} 
               title={t('lectures.views')}
             >
               <FaEye size={12} /> {lecture?.views || 0}

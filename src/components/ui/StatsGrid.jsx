@@ -3,10 +3,10 @@ import { FaEye, FaDownload, FaSearch, FaChartBar } from 'react-icons/fa';
 
 const StatsGrid = ({ stats }) => {
   const items = [
-    { label: "زيارات البروفايل", value: stats.views, icon: FaEye, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "تحميلات الملفات", value: stats.downloads, icon: FaDownload, color: "text-emerald-600", bg: "bg-emerald-50" },
-    { label: "ظهور في البحث", value: stats.searchHits, icon: FaSearch, color: "text-amber-600", bg: "bg-amber-50" },
-    { label: "معدل التفاعل", value: stats.engagement, icon: FaChartBar, color: "text-purple-600", bg: "bg-purple-50" },
+    { label: "زيارات البروفايل", value: stats.views, icon: FaEye, color: "text-brand-primary", bg: "bg-brand-primary/10" },
+    { label: "تحميلات الملفات", value: stats.downloads, icon: FaDownload, color: "text-brand-secondary", bg: "bg-brand-secondary/10" },
+    { label: "ظهور في البحث", value: stats.searchHits, icon: FaSearch, color: "text-slate-600", bg: "bg-slate-100" },
+    { label: "معدل التفاعل", value: stats.engagement, icon: FaChartBar, color: "text-slate-600", bg: "bg-slate-100" },
   ];
 
   return (

@@ -49,7 +49,7 @@ export const statsData = [
     title: "الأعضاء",
     value: 86,
     Icon: FaSmile,
-    gradient: "bg-gradient-to-r from-green-500 to-emerald-500",
+    gradient: "bg-gradient-to-r from-brand-primary to-brand-secondary",
   },
   {
     title: "المحاضرين",

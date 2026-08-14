@@ -5,8 +5,8 @@ import { Link as RouterLink } from 'react-router-dom'
 const variantStyles = {
   primary: 'bg-brand-primary text-white hover:bg-brand-primaryHover focus:ring-brand-primary/30',
   secondary: 'border-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-brand-primary focus:ring-brand-primary/30',
-  accent: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 focus:ring-emerald-300',
-  accentSoft: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 focus:ring-emerald-200',
+  accent: 'bg-brand-accent text-white hover:bg-brand-accentHover focus:ring-brand-accent/40',
+  accentSoft: 'bg-brand-accentSoft text-slate-950 hover:bg-brand-accent/10 focus:ring-brand-accent/30',
   ghost: 'text-slate-600 hover:text-brand-primary hover:bg-slate-50 focus:ring-slate-300',
 }
 

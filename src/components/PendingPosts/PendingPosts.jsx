@@ -18,7 +18,7 @@ const PendingPosts = ({ items, onApprove, onReject }) => {
               <p className="text-xs text-slate-500">بواسطة: {item.authorName}</p>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => onApprove(item.id)} className="p-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition"><FaCheck/></button>
+              <button onClick={() => onApprove(item.id)} className="p-3 bg-brand-secondary text-white rounded-xl hover:bg-brand-secondaryHover transition"><FaCheck/></button>
               <button onClick={() => onReject(item.id)} className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition"><FaTimes/></button>
             </div>
           </div>

@@ -6,7 +6,7 @@ const EmptyState = ({ message, actionText, onAction, icon = '📭' }) => (
     {actionText && onAction && (
       <button 
         onClick={onAction}
-        className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-full font-bold text-sm hover:bg-emerald-700 transition"
+        className="mt-4 px-6 py-2 bg-brand-secondary text-white rounded-full font-bold text-sm hover:bg-brand-secondaryHover transition"
       >
         {actionText}
       </button>

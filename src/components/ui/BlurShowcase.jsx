@@ -23,10 +23,10 @@ const BlurShowcase = ({
     <section className="relative space-y-6">
       <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
 
-      {/* Masonry Grid */}
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 relative">
+      {/* Responsive Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative">
         {displayedItems.map((item, index) => (
-          <div key={loading ? index : item.id} className="break-inside-avoid mb-6">
+          <div key={loading ? index : item.id} className="h-full">
             <CardComponent {...item} loading={loading} />
           </div>
         ))}

@@ -77,7 +77,7 @@ const Lecturers = () => {
               navigate(`/lectures?speaker=${encodeURIComponent(lecturer.name)}`)
             }
           >
-            <h3 className="text-xl sm:text-2xl font-semibold text-slate-900 hover:text-emerald-600 transition">
+            <h3 className="text-xl sm:text-2xl font-semibold text-slate-900 hover:text-brand-secondary transition">
               {lecturer.name}
             </h3>
             <p className="mt-2">

@@ -247,7 +247,7 @@ const Login = () => {
             <div className="grid grid-cols-3 gap-2">
               {[
                 { role: 'ADMIN', label: '👑 ADMIN', color: 'red' },
-                { role: 'MEMBER', label: '👤 MEMBER', color: 'emerald' },
+                { role: 'MEMBER', label: '👤 MEMBER', color: 'blue' },
                 { role: 'GUEST', label: '👁️ GUEST', color: 'slate' }
               ].map(({ role, label, color }) => (
                 <motion.button 

@@ -108,21 +108,6 @@ const About = () => {
               `} />
             </div>
 
-            {/* زر تبديل الثيم === */}
-            <button
-              onClick={toggleTheme}
-              className={`
-                absolute top-4 ${isRTL ? 'left-4' : 'right-4'} z-30
-                p-2.5 rounded-xl transition-all duration-200
-                ${isDark 
-                  ? 'bg-gray-700 text-yellow-400 hover:bg-gray-600 hover:scale-110' 
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:scale-110'
-                }
-              `}
-              aria-label={isDark ? t('nav.lightMode') : t('nav.darkMode')}
-            >
-              {isDark ? <FaSun size={18} /> : <FaMoon size={18} />}
-            </button>
 
             {/* === قسم الهيدر - باستخدام المكون المشترك ✅ === */}
             <motion.div 

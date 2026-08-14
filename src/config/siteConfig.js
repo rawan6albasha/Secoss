@@ -29,18 +29,19 @@ export const SITE_CONFIG = {
   // === الألوان والهوية البصرية ===
   theme: {
     colors: {
-      primary: '#1E40AF',      // أزرق الثقة
+      primary: '#1E40AF',      // أزرق رسمي وموثوق
       primaryHover: '#1E3A8A',
-      secondary: '#10B981',    // أخضر الأمل
-      secondaryHover: '#059669',
-      accent: '#F59E0B',       // برتقالي للتأكيد
+      secondary: '#2563EB',    // أزرق داعم متناسق مع الهوية
+      secondaryHover: '#1D4ED8',
+      accent: '#2563EB',       // نفس الأسرة الزرقاء للوضوح
+      accentHover: '#1E40AF',
       background: {
-        light: '#FFFFFF',
-        dark: '#0F172A',
+        light: '#F8FAFC',
+        dark: '#020617',
       },
       surface: {
-        light: '#F8FAFC',
-        dark: '#1E293B',
+        light: '#FFFFFF',
+        dark: '#111827',
       },
     },
     fonts: {

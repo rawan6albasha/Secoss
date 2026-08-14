@@ -90,7 +90,7 @@ const ImageUploader = ({
         w-10 h-10 rounded-xl flex items-center justify-center
         transition-all duration-200
         ${uploadStatus === 'success' 
-          ? 'bg-green-500 text-white' 
+          ? 'bg-brand-secondary text-white' 
           : uploadStatus === 'error'
             ? 'bg-red-500 text-white'
             : isHovered 
@@ -113,7 +113,7 @@ const ImageUploader = ({
       <span className={`
         text-[10px] font-bold text-center px-2 transition-colors
         ${uploadStatus === 'success' 
-          ? 'text-green-600 dark:text-green-400' 
+          ? 'text-brand-secondary dark:text-brand-secondary' 
           : uploadStatus === 'error'
             ? 'text-red-600 dark:text-red-400'
             : isHovered 

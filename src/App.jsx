@@ -29,6 +29,8 @@ import RoleGuard from './components/RBAC/RoleGuard';
 import { roles, PERMISSION_KEYS } from './config/permissions';
 import AccountSettings from './pages/Profile/AccountSettings';
 import { useTheme } from './context/ThemeContext';
+import MemberGuard from './components/RBAC/MemberGuard';
+import MeetingReports from './pages/MeetingReports/MeetingReports';
 
 function App() {
   const { i18n } = useTranslation();
@@ -51,8 +53,7 @@ function App() {
       {/* خلفية زخرفية ناعمة للوضع الداكن */}
       {isDark && (
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-brand-primary/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-brand-secondary/10 rounded-full blur-3xl" />
+          <div className="absolute -top-44 -right-24 w-72 h-72 bg-brand-primary/8 rounded-full blur-3xl" />
         </div>
       )}
       
@@ -109,6 +110,16 @@ function App() {
               </RoleGuard>
             } 
           />
+          <Route 
+  path="/members/meetings" 
+  element={
+    <ProtectedRoute>
+      <MemberGuard>
+        <MeetingReports />
+      </MemberGuard>
+    </ProtectedRoute>
+  } 
+/>
           
           {/* 404 Fallback === */}
           <Route path="*" element={<Navigate to="/" replace />} />

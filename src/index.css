@@ -216,3 +216,6 @@ article,
 main {
   overflow: visible !important;
 }
+select{
+       background-image:none
+}

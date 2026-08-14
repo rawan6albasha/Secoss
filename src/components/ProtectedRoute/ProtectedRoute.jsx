@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, requiredRole = null, requiredPermission = nu
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-brand-secondary/20 border-t-brand-secondary rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -37,13 +37,13 @@ const ProtectedRoute = ({ children, requiredRole = null, requiredPermission = nu
           <div className="flex gap-3 justify-center">
             <button 
               onClick={() => navigate(-1)}  // ✅ التصحيح: navigate بدلاً من Navigate
-              className="px-4 py-2 text-emerald-600 font-bold hover:underline transition"
+              className="px-4 py-2 text-brand-secondary font-bold hover:underline transition"
             >
               العودة للخلف
             </button>
             <button 
               onClick={() => navigate('/profile')}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold text-sm hover:bg-emerald-700 transition"
+              className="px-4 py-2 bg-brand-secondary text-white rounded-lg font-bold text-sm hover:bg-brand-secondaryHover transition"
             >
               الذهاب للبروفايل
             </button>

@@ -7,11 +7,11 @@ import { FaTrash } from 'react-icons/fa';
 
 const variantStyles = {
   primary: {
-    light: "bg-white border-slate-100 hover:border-emerald-200",
-    dark: " border-gray-700 hover:border-brand-secondary/30 ",
+    light: "bg-white border-slate-100 hover:border-brand-secondary/30",
+    dark: "border-gray-700 hover:border-brand-secondary/30",
   },
   accent: {
-    light: "bg-emerald-50/30 border-emerald-100 hover:border-emerald-300",
+    light: "bg-brand-secondary/10 border-brand-secondary/20 hover:border-brand-secondary/40",
     dark: "border-gray-700 hover:border-brand-secondary/40",
   },
 };
@@ -67,7 +67,7 @@ const InfoBubble = ({
                 key={i} 
                 className={`
                   transition-colors
-                  ${isDark ? 'hover:text-brand-secondary' : 'hover:text-accent'}
+                  ${isDark ? 'hover:text-brand-secondary' : 'hover:text-brand-secondary'}
                 `}
               >
                 {item || '---'}

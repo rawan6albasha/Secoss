@@ -1,6 +1,6 @@
 // src/components/ui/ThemeToggle/ThemeToggle.jsx
 import React from 'react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 import { FaSun, FaMoon } from 'react-icons/fa';
 
 const ThemeToggle = ({ className = '', variant = 'button' }) => {
