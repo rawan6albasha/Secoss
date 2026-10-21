@@ -11,6 +11,14 @@ const Pagination = ({
   onPageChange, // دالة اختيارية للإشعار بتغير الصفحة
   className = ""
 }) => {
+  const totalPages = Math.ceil((items?.length || 0) / perPage)
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const visibleItems = useMemo(() => {
+    if (!items) return []
+    return items.slice((currentPage - 1) * perPage, currentPage * perPage)
+  }, [items, currentPage, perPage])
+
   
   if (!items || items.length === 0) {
     return (
@@ -20,21 +28,11 @@ const Pagination = ({
     )
   }
  
-  const totalPages = Math.ceil(items.length / perPage)
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const visibleItems = useMemo(() => {
-    return items.slice((currentPage - 1) * perPage, currentPage * perPage)
-  }, [items, currentPage, perPage])
-
   const handleChange = useCallback((page) => {
     if (page < 1 || page > totalPages || page === currentPage) return
     
     setCurrentPage(page)
     onPageChange?.(page)
-    
-    // تمرير سلس لأعلى الصفحة
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [currentPage, totalPages, onPageChange])
 
   // === توليد أرقام الصفحات مع ... ===

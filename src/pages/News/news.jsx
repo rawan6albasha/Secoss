@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaPlus } from 'react-icons/fa';
 
 // === أدوات مركزية ===
 import { getLocalizedText, toBilingualOptions } from '../../utils/i18n-helpers';
@@ -18,6 +19,7 @@ import InfiniteScrollFeed from '../../components/ui/InfiniteScrollFeed';
 import SectionHeader from '../../components/ui/SectionHeader';
 import CreatePostModal from '../../components/CreatePostModal/CreatePostModal';
 import Card from '../../components/Card/Card';
+import Button from '../../components/ui/Button';
 
 // === Redux ===
 import { setFilter, clearFilters } from './../../store/slices/newsSlice';
@@ -69,19 +71,28 @@ const News = () => {
 
   // === ✅ فلترة الأخبار - منطق مبسط وصحيح ===
   const filteredNews = useMemo(() => {
+    const getSearchValues = (value) => {
+      if (Array.isArray(value)) {
+        return value.flatMap(getSearchValues);
+      }
+
+      const text = getLocalizedText(value, currentLang);
+      return text ? [text] : [];
+    };
+
     return items.filter(n => {
-      // 1️⃣ البحث الشامل (العنوان + الوصف + المحتوى + النوع)
+      // البحث في العنوان والوصف والمحتوى الكامل والنوع والوسوم
       if (filters.search?.trim()) {
-        const searchLower = filters.search.toLowerCase();
+        const searchLower = filters.search.trim().toLowerCase();
         
         const fieldsToSearch = [
-          getLocalizedText(n.title, currentLang),
-          getLocalizedText(n.description, currentLang),
-          getLocalizedText(n.content, currentLang),
-          getLocalizedText(n.type, currentLang),
-          getLocalizedText(n.subType, currentLang),
-          ...(n.tags?.map(tag => getLocalizedText(tag, currentLang)) || []),
-        ].filter(Boolean).map(f => f.toLowerCase());
+          ...getSearchValues(n.title),
+          ...getSearchValues(n.description),
+          ...getSearchValues(n.content),
+          ...getSearchValues(n.type),
+          ...getSearchValues(n.subType),
+          ...getSearchValues(n.tags),
+        ].map(field => field.toLowerCase());
         
         // إذا لم يطابق أي حقل ← استبعده
         if (!fieldsToSearch.some(field => field.includes(searchLower))) {
@@ -181,18 +192,17 @@ const News = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <button 
+              <Button
                 onClick={handleOpenCreate}
-                className={`
-                  flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm shadow-lg transition-all
-                  ${isDark 
-                    ? 'bg-brand-secondary text-white hover:bg-brand-secondaryHover' 
-                    : 'bg-brand-primary text-white hover:bg-brand-primaryHover'
-                  }
-                `}
+                icon={FaPlus}
+                size="md"
+                variant="primary"
+                className={`rounded-xl shadow-lg shadow-brand-primary/20 hover:-translate-y-0.5 hover:shadow-xl ${
+                  isDark ? 'bg-brand-secondary hover:bg-brand-secondaryHover focus:ring-brand-secondary/40' : ''
+                }`}
               >
-                <span>+</span> {t('news.publishNew')}
-              </button>
+                {t('news.publishNew')}
+              </Button>
             </motion.div>
           )}
         </motion.div>

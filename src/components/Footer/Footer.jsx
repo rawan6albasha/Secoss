@@ -44,7 +44,6 @@ const FooterLink = ({ label, path, navigate, delay, isInView, isRTL }) => (
       w-full
     `}
   >
-  {console.log('isRTL=',isRTL)}
     <span className={`
       w-0 group-hover:w-2 h-0.5 bg-brand-secondary 
       transition-all duration-300 rounded-full
@@ -99,7 +98,7 @@ const Footer = () => {
   const isInView = useInView(footerRef, { once: true, margin: "-100px" });
   
   const currentLang = i18n.language || 'ar';
-  const isRTL = currentLang === 'ar';
+  const isRTL = currentLang.startsWith('ar');
 
   // === استخراج بيانات الفوتر ===
   const footerSections = useMemo(() => ({
@@ -162,7 +161,7 @@ const Footer = () => {
 
       {/* === المحتوى الرئيسي === */}
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid mt-8 gap-10 lg:gap-12 grid-cols-1  sm:grid-cols-2 lg:grid-cols-4">
           
           {/* === عن الجمعية === */}
           {footerSections.about && (
@@ -220,12 +219,13 @@ const Footer = () => {
                     address: FaMapMarkerAlt,
                   };
                   const Icon = icons[item.type];
+                  const label = item.type === 'address' ? t(item.value) : item.value;
                   
                   return (
                     <ContactItem
                       key={item.type}
                       icon={Icon}
-                      label={item.value}
+                      label={label}
                       href={item.type === 'email' ? `mailto:${item.value}` : item.type === 'phone' ? `tel:${item.value}` : null}
                       delay={0.2 + (i * 0.05)}
                       isInView={isInView}

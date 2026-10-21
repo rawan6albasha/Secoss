@@ -144,7 +144,7 @@ const CommentsSystem = ({
   // === عدم العرض إذا لم يسجل الدخول ===
   if (!user) {
     return (
-      <section className={`mt-8 pt-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+      <section className={`mt-8  pt-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="flex items-center justify-between mb-4">
           <h3 className={`text-lg font-black flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             <FaComment className="text-brand-secondary" />
@@ -177,7 +177,7 @@ const CommentsSystem = ({
   // === التعليقات مغلقة ===
   if (commentsDisabled) {
     return (
-      <section className={`mt-8 pt-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+      <section className={`mt-8  pt-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="flex items-center justify-between mb-4">
           <h3 className={`text-lg font-black flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             <FaLock className={isDark ? 'text-gray-500' : 'text-gray-400'} />
@@ -201,7 +201,7 @@ const CommentsSystem = ({
   }
 
   return (
-    <section className={`mt-8 pt-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+    <section className={`mt-8 mx-8 pt-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
       {/* Header === */}
       <div className="mx-4 flex items-center justify-between mb-4">
         <h3 className={`text-lg font-black flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -243,12 +243,13 @@ const CommentsSystem = ({
             <div className="flex-1">
               {/* حقل الإدخال === */}
               <div className={`
-                rounded-2xl px-6 py-4 border transition-all duration-200
+                rounded-2xl px-5 py-3 border transition-all duration-200 shadow-sm
                 ${isDark 
-                  ? 'bg-gray-800/50 border-gray-700 focus-within:border-brand-secondary focus-within:bg-gray-800' 
-                  : 'bg-gray-50 border-gray-200 focus-within:border-brand-primary focus-within:bg-white'
+                  ? 'bg-gray-800/70 border-gray-700/80 focus-within:border-brand-secondary/60 focus-within:ring-2 focus-within:ring-brand-secondary/15 focus-within:bg-gray-800' 
+                  : 'bg-gray-50 border-gray-200 focus-within:border-brand-primary/50 focus-within:ring-2 focus-within:ring-brand-primary/10 focus-within:bg-white'
                 }
               `}>
+            
                 <input
                   type="text"
                   value={newComment}
@@ -260,8 +261,9 @@ const CommentsSystem = ({
                     }
                   }}
                   placeholder={getLocalizedText(t("comments.placeholder") || "اكتب تعليقاً...", currentLang)}
+                  aria-label={getLocalizedText(t("comments.placeholder") || "اكتب تعليقاً...", currentLang)}
                   className={`
-                    w-full bg-transparent text-base outline-none placeholder-gray-400 py-2
+                    w-full border-none appearance-none bg-transparent py-2 text-base outline-none ring-0 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-transparent
                     ${isDark ? 'text-white' : 'text-gray-800'}
                   `}
                   dir={isRTL ? "rtl" : "ltr"}
@@ -310,11 +312,13 @@ const CommentsSystem = ({
             </div>
           </motion.div>
         ) : (
+  
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className={`p-4 rounded-xl border text-center text-sm mb-6 ${isDark ? 'bg-gray-800/50 border-gray-700 text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-500'}`}
           >
+  
             ⚠️ {getLocalizedText(t("comments.noPermission") || "ليس لديك صلاحية لإضافة تعليقات", currentLang)}
           </motion.div>
         )}

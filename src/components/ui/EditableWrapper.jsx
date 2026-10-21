@@ -35,7 +35,7 @@ const EditableWrapper = ({
 { showButton &&(     <button
         onClick={onEdit}
         className={`
-          absolute z-10 p-2 rounded-full
+          absolute z-30 p-2 rounded-full
           flex items-center justify-center
           cursor-pointer border-none
           transition-all duration-150
@@ -45,7 +45,7 @@ const EditableWrapper = ({
             ? 'bg-brand-primary text-white hover:bg-brand-primaryHover shadow-lg shadow-brand-primary/25' 
             : 'bg-brand-primary text-white hover:bg-brand-primaryHover shadow-brand'
           }
-          ${getPositionClasses(editButtonPosition)}
+          ${editButtonPosition === 'top-end' ? 'top-4 end-4' : getPositionClasses(editButtonPosition)}
         `}
         aria-label={editButtonLabel}
         type="button"

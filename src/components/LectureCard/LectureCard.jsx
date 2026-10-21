@@ -58,8 +58,6 @@ const LectureCard = ({ lecture, onBookmark, isBookmarked = false }) => {
   return (
     <motion.article 
       variants={cardVariants}
-      initial="hidden"
-      animate="visible"
       whileHover="hover"
       onClick={handleCardClick}
       className={`

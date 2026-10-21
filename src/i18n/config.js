@@ -6,8 +6,43 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // === قاموس الترجمات المركزي ===
 export const TRANSLATIONS = {
   ar: {
+    profile:{
+      completion: 'اكتمال ملفك الشخصي',
+      likes: 'إعجابات',
+      posts: 'منشورات',
+      followers: 'متابعون',
+      views: 'مشاهدات',
+      adminReview: 'مراجعات',
+      published: 'منشور',
+      pending: 'قيد الانتظار',
+      specialization: 'التخصص',
+      work: 'العمل',
+      certificates: 'الشهادات',
+      addCertificate: 'إضافة شهادات',
+      complete: 'اكمل ملفك الشخصي',
+      academicLinks: 'روابط أكاديمية',
+         academicInfo: 'المعلومات الأكاديمية',
+         addLink: 'إضافة رابط',
+
+    },
+    settings: {
+      subtitle: 'إدارة إعدادات الحساب',
+      email: 'البريد الإلكتروني',
+      emailReadonly: 'البريد الإلكتروني (غير قابل للتعديل)',
+      phone: 'رقم الهاتف',
+      emailNotifications: 'الإشعارات عبر البريد الإلكتروني',
+      language: 'اللغة',
+      title: 'الإعدادات',
+      general: 'عام',
+      profile: 'الملف الشخصي',
+      notifications: 'الإشعارات',
+      privacy: 'الخصوصية',
+      security: 'الأمان',
+   
+    },
     // عام
     common: {
+      share: 'مشاركة',
       loading: 'جاري التحميل...',
       error: 'حدث خطأ',
       success: 'تم بنجاح',
@@ -27,7 +62,6 @@ export const TRANSLATIONS = {
   success: 'تم بنجاح',
   cancel: 'إلغاء',
   confirm: 'تأكيد',
-  save: 'حفظ',
   delete: 'حذف',
   edit: 'تعديل',
   view: 'عرض',
@@ -35,6 +69,7 @@ export const TRANSLATIONS = {
   back: 'عودة',
   next: 'التالي',
   previous: 'السابق',
+  bio: 'السيرة الذاتية',
        // ... existing translations
   uploadImage: 'تحميل صورة',
   uploadSuccess: '✅ تم التحميل بنجاح!',
@@ -100,6 +135,7 @@ export const TRANSLATIONS = {
   filterByCategory: 'التصنيف الرئيسي',
   filterBySubCategory: 'التصنيف الفرعي',
   clearFilters: 'مسح الفلاتر',
+  addNew: 'إضافة محاضرة جديدة',
   
   // === النتائج ===
   lecturesAvailable: 'محاضرة متاحة',
@@ -121,6 +157,18 @@ export const TRANSLATIONS = {
 },
 
 lecture: {
+  content: 'المحتوى',
+  summary: 'الملخص',
+  title: 'عنوان المحاضرة',
+  tags: 'الوسوم',
+  addTag: 'أضف الوسوم',
+  mainCategory: 'التصنيف الرئيسي',
+  subCategory: 'التصنيف الفرعي',
+  subCategoryPlaceholder: 'التصنيف الفرعي',
+  attachment: 'المرفقات',
+  hybridNote:"اضف ملاحظة",
+  submitForReview: 'إرسال للمراجعة',
+  createLecture: 'إنشاء محاضرة',
     selectCategory: 'اختر التصنيف',
   addCustomCategory: '✨ إضافة تصنيف مخصص',
   customCategoryLabel: 'اسم التصنيف الجديد',
@@ -151,9 +199,14 @@ lecture: {
 
 post: {
   // === عرض المحتوى ===
+  published:'تم النشر',
+  write: 'كتابة',
+  preview: 'معاينة',
+  optional: 'اختياري',
   showMore: 'عرض المزيد',
   showLess: 'عرض أقل',
   pdfFile: 'ملف PDF',
+  newPost: 'منشور جديد',
   
   // === التفاعل ===
   like: 'إعجاب',
@@ -218,7 +271,21 @@ post: {
     darkMode:'الوضع الداكن',
   lightMode:'الوضع الفاتح',
 },
+lecturers: {
+  eyebrow: 'الهيئة الأكاديمية',
+  title: 'تعرّف على محاضرينا',
+  description: 'اكتشف الخبرات الأكاديمية واستعرض المحاضرات المتخصصة لكل محاضر.',
+  count: 'محاضرون',
+  publishedLectures: 'محاضرة منشورة',
+  sectionTitle: 'المحاضرون',
+  sectionDescription: 'اختر محاضرًا لعرض محاضراته',
+  lecture: 'محاضرة',
+  lectures: 'محاضرات',
+  viewLectures: 'عرض المحاضرات',
+  noResults: 'لم يتم العثور على محاضر بهذا الاسم.',
+},
 footer: {
+
   about: {
     title: 'عن الجمعية',
     content: 'منصة علمية متخصصة لنشر المعرفة الاقتصادية وتطوير الكوادر الأكاديمية في سوريا والمنطقة العربية.',
@@ -228,6 +295,7 @@ footer: {
   },
   contact: {
     title: 'تواصل معنا',
+    location: 'سوريا، دمشق',
   },
   newsletter: {
     title: 'النشرة البريدية',
@@ -237,6 +305,9 @@ footer: {
     success: '✅ تم الاشتراك بنجاح!',
   },
   copyright: '© {{year}} {{org}}. جميع الحقوق محفوظة.',
+  followUs:"تابعنا",
+  privacy:"الخصوصية",
+  terms:"الشروط",
 },
 
     board: {
@@ -357,6 +428,7 @@ about: {
  
   // === رسائل ===
   noSections: 'لا توجد أقسام لعرضها',
+  deleteSection: 'حذف هذا القسم',
   deleteConfirm: 'هل أنت متأكد من حذف هذا القسم؟',
 },
 conditions: {
@@ -502,6 +574,7 @@ register: {
   },
 },
 news: {
+  share:'مشاركة',
     filterType: 'نوع الخبر',
   filterYear: 'السنة',
   selectType: 'اختر النوع',
@@ -516,7 +589,7 @@ news: {
   description: 'آخر الأخبار والفعاليات',
   
   // === الأزرار ===
-  publishNew: '+ نشر خبر جديد',
+  publishNew: 'انشر خبر جديد',
   editNews: '✏️ تعديل الخبر',
   publish: 'نشر',
   
@@ -573,12 +646,45 @@ news: {
   },
   
   en: {
-
+    profile:{
+      completion: 'Complete your profile',
+      likes: 'Likes',
+      posts: 'Posts',
+      followers: 'Followers',
+      views: 'Views',
+      adminReview: 'Admin Reviews',
+      published: 'Published',
+      pending: 'Pending',
+      specialization: 'Specialization',
+      work: 'Work',
+      certificates: 'Certificates',
+      addCertificate: 'Add Certificates',
+      complete: 'Complete your profile',
+      academicLinks: 'Academic Links',
+      academicInfo: 'Academic Information',
+       addLink: 'Add Link',
+      
+    },
+    settings: {
+      subtitle: 'Manage account settings',
+      email: 'Email Address',
+      emailReadonly: 'Email Address (Read-only)',
+      phone: 'Phone Number',
+      emailNotifications: 'Email Notifications',
+      language: 'Language',
+      title: 'Settings',
+      general: 'General',
+      profile: 'Profile',
+      notifications: 'Notifications',
+      privacy: 'Privacy',
+      security: 'Security',
+    },
     news: {
+  share:'Share',
   eyebrow: 'Association News',
   title: 'News',
   description: 'Latest news and events',
-  publishNew: '+ Publish News',
+  publishNew: 'Publish News',
   editNews: '✏️ Edit News',
   publish: 'Publish',
   filterType: 'News Type',
@@ -615,6 +721,9 @@ news: {
   previewNote: 'This is an approximate preview. Final appearance may vary slightly.',
   noTitle: 'No title',
   searchInContent: 'Search in content too',
+  selectType: 'Select type',
+  selectYear: 'Select year',
+  clearFilters: 'Clear filters',
 },
     login: {
   welcomeTitle: 'Welcome Back',
@@ -707,7 +816,8 @@ register: {
 },
     // عام
     common: {
-      
+      share: 'Share',
+      add:'add',
       loading: 'Loading...',
       error: 'An error occurred',
       success: 'Success',
@@ -739,6 +849,7 @@ register: {
   back: 'Back',
   next: 'Next',
   previous: 'Previous',
+  bio: 'Bio',
   errors: {
     invalidImage: 'Please select a valid image file',
     imageTooLarge: 'Image size must be less than {{size}}MB',
@@ -775,6 +886,7 @@ register: {
 },
 
 lectures: {
+  addNew: 'Add New Lecture',
   eyebrow: 'Digital Library',
   title: 'Scientific Lectures',
   description: 'A collection of specialized lectures in the economic field',
@@ -799,6 +911,17 @@ lectures: {
 },
 
 lecture: {
+  content: 'Content',
+  summary: 'summary',
+  title: 'Lecture Title',
+  tags: 'Tags',
+  addTag: 'Add Tags',
+  mainCategory: 'Main Category',
+  subCategory: 'Sub Category',
+  subCategoryPlaceholder: 'Sub Category',
+  attachment: 'attachment',
+  hybridNote:"Add a note",
+
   statusApproved: 'Published',
   statusPending: 'Pending Review',
   statusRejected: 'Rejected',
@@ -817,6 +940,10 @@ lecture: {
 },
 
 post: {
+  published: 'Published',
+  write: 'Write',
+  preview: 'Preview',
+  optional: 'Optional',
   showMore: 'Show more',
   showLess: 'Show less',
   pdfFile: 'PDF File',
@@ -836,10 +963,12 @@ post: {
   rejectReason: '⚠️ Reason for rejection',
   dataNotAvailable: 'Post data not available',
   moreOptions: 'More options',
+  newPost: 'New Post',
   reported: '✅ Report submitted, thank you',
   hasTranslation: 'Translation available',
   availableIn: 'Available in {lang}',
   translationAvailable: '💡 This content is also available in {lang}',
+
 },
 status: {
   approved: 'Published',
@@ -880,6 +1009,19 @@ nav: {
   darkMode:'darkMode',
   lightMode:'lightMode',
 },
+lecturers: {
+  eyebrow: 'Academic Faculty',
+  title: 'Meet our lecturers',
+  description: 'Explore our academic experts and discover the specialized lectures by each lecturer.',
+  count: 'Lecturers',
+  publishedLectures: 'Published lectures',
+  sectionTitle: 'Lecturers',
+  sectionDescription: 'Select a lecturer to view their lectures',
+  lecture: 'lecture',
+  lectures: 'lectures',
+  viewLectures: 'View lectures',
+  noResults: 'No lecturer found with this name.',
+},
 footer: {
   about: {
     title: 'About Us',
@@ -890,6 +1032,7 @@ footer: {
   },
   contact: {
     title: 'Contact Us',
+    location: 'Syria, Damascus',
   },
   newsletter: {
     title: 'Newsletter',
@@ -899,6 +1042,9 @@ footer: {
     success: '✅ Subscribed successfully!',
   },
   copyright: '© {{year}} {{org}}. All rights reserved.',
+  followUs:"Follow us",
+  privacy:"privacy",
+  terms:"terms",
 },
     board: {
       // Header
@@ -1018,6 +1164,7 @@ about: {
   
   // === Messages ===
   noSections: 'No sections to display',
+  deleteSection: 'Delete this section',
   deleteConfirm: 'Are you sure you want to delete this section?',
 },
 conditions: {

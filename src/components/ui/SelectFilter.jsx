@@ -133,14 +133,6 @@ const SelectFilter = ({
           <FaChevronDown size={14} className={`transition-transform duration-200 ${disabled ? '' : 'group-hover:rotate-180'}`} />
         </div>
 
-        {/* === مؤشر التعطيل === */}
-        {disabled && (
-          <div className={`
-            absolute inset-0 rounded-xl pointer-events-none z-20
-            ${isDark ? 'bg-gray-800/60' : 'bg-white/60'}
-            backdrop-blur-[2px]
-          `} />
-        )}
       </div>
     </motion.div>
   );

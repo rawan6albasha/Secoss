@@ -20,6 +20,7 @@ export const users = [
       'زمالة الجمعية الاقتصادية العربية',
       'شهادة التحليل المالي المعتمد (CFA Level 2)'
     ],
+
     socialLinks: {
       linkedin: 'https://linkedin.com/in/ahmed-khalil',
       researchGate: 'https://researchgate.net/profile/ahmed-khalil'
@@ -104,6 +105,9 @@ export const users = [
     approvedPostsCount: 3
   }
 ];
+
+// المستخدمون الذين يظهرون ضمن دليل المحاضرين
+export const lecturers = users.filter(user => user.role === 'ADMIN' || user.postsCount > 0);
 
 // دالة مساعدة للبحث عن مستخدم (للمحاكاة)
 export const findUserById = (id) => users.find(u => u.id === id);

@@ -326,10 +326,10 @@ const ItemComments = ({
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
                   className={`
-                    w-full p-4 rounded-xl border text-sm resize-y min-h-32 outline-none transition-all leading-relaxed
+                    w-full p-4 rounded-xl border-none text-sm resize-y min-h-32 outline-none ring-0 focus:outline-none focus:ring-0 transition-all leading-relaxed
                     ${isDark 
-                      ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-500 focus:border-brand-secondary focus:ring-2 focus:ring-brand-secondary/20' 
-                      : 'bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20'
+                      ? 'bg-gray-700/50 border-none text-white placeholder-gray-500 ' 
+                      : 'bg-white border-none text-gray-800 placeholder-gray-400  '
                     }
                   `}
                   autoFocus
@@ -441,7 +441,7 @@ const ItemComments = ({
                     onKeyDown={handleKeyDown}
                     placeholder={translate?.('comments.replyPlaceholder') || 'اكتب ردك...'}
                     className={`
-                      w-full bg-transparent text-sm outline-none placeholder-gray-400 py-2
+                      w-full bg-transparent text-sm outline-none ring-0 focus:outline-none focus:ring-0 placeholder-gray-400 py-2
                       ${isDark ? 'text-white' : 'text-gray-800'}
                     `}
                     autoFocus

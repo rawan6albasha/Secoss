@@ -87,6 +87,7 @@ const About = () => {
         <EditableWrapper
           isAdmin={isAdmin}
           onEdit={() => {}}  // ✅ SectionHeader يدير التعديل داخلياً
+          showButton={false}
           className="relative overflow-hidden rounded-[2.5rem] border shadow-2xl backdrop-blur-sm"
           editButtonPosition="top-end"
           editButtonLabel={t('about.editHeader')}

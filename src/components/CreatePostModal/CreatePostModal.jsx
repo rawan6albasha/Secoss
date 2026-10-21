@@ -1,5 +1,6 @@
 // src/components/modals/CreatePostModal/CreatePostModal.jsx
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { FaTimes, FaFilePdf, FaImage, FaLink, FaTrash, 
   FaPlus, FaEye, FaEyeSlash, FaBold, FaItalic, FaCalendar, FaChevronDown
 } from 'react-icons/fa';
@@ -227,7 +228,6 @@ const CreatePostModal = ({
       } else {
         setFormData(prev => ({ ...prev, type: newType.id, customType: { ar: '', en: '' } }));
       }
-      console.log("الاضافة بنجاح")
       onTypeAdded?.();
     }
   }, [formData.customType, formData.customSubType, formData.type, postType, onTypeAdded]);
@@ -377,13 +377,14 @@ const CreatePostModal = ({
     exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.2 } }
   };
 
-  return (
+  return createPortal(
+    (
     <AnimatePresence>
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4"
+        className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4"
         dir={isRTL ? 'rtl' : 'ltr'}
         onClick={(e) => e.target === e.currentTarget && onClose()}
       >
@@ -473,6 +474,7 @@ const CreatePostModal = ({
                     <LocalizedContentInput
                       label={postType === 'NEWS' ? t('news.title') : t('lecture.title')}
                       value={formData.title}
+                      showBothLanguages={true}
                       onChange={(val) => setFormData({ ...formData, title: val })}
                       placeholder={{ 
                         ar: t(postType === 'NEWS' ? 'news.titlePlaceholder.ar' : 'lecture.titlePlaceholder.ar'), 
@@ -485,6 +487,7 @@ const CreatePostModal = ({
                     <LocalizedContentInput
                       label={postType === 'NEWS' ? t('news.description') : t('lecture.summary')}
                       value={formData.summary}
+                      showBothLanguages={true}
                       onChange={(val) => setFormData({ ...formData, summary: val })}
                       placeholder={{ 
                         ar: t(postType === 'NEWS' ? 'news.descriptionPlaceholder.ar' : 'lecture.summaryPlaceholder.ar'), 
@@ -497,6 +500,7 @@ const CreatePostModal = ({
                     <LocalizedContentInput
                       label={postType === 'NEWS' ? t('news.content') : t('lecture.content')}
                       value={formData.content}
+                      showBothLanguages={true}
                       onChange={(val) => setFormData({ ...formData, content: val })}
                       placeholder={{ 
                         ar: t(postType === 'NEWS' ? 'news.contentPlaceholder.ar' : 'lecture.contentPlaceholder.ar'), 
@@ -552,6 +556,7 @@ const CreatePostModal = ({
                                 <LocalizedContentInput
                                   label={t('lecture.customCategoryLabel')}
                                   value={formData.customType}
+                                  showBothLanguages={true}
                                   onChange={(val) => setFormData({ ...formData, customType: val })}
                                   placeholder={{ 
                                     ar: 'اسم التصنيف بالعربية', 
@@ -714,6 +719,7 @@ const CreatePostModal = ({
                                 <LocalizedContentInput
                                   label={t('news.customMainTypeLabel')}
                                   value={formData.customType}
+                                  showBothLanguages={true}
                                   onChange={(val) => setFormData({ ...formData, customType: val })}
                                   placeholder={{ 
                                     ar: 'اسم النوع بالعربية', 
@@ -795,6 +801,7 @@ const CreatePostModal = ({
                                   <LocalizedContentInput
                                     label={t('news.customSubTypeLabel')}
                                     value={formData.customSubType}
+                                    showBothLanguages={true}
                                     onChange={(val) => setFormData({ ...formData, customSubType: val })}
                                     placeholder={{ 
                                       ar: 'اسم النوع الفرعي بالعربية', 
@@ -912,6 +919,7 @@ const CreatePostModal = ({
                               }}
                               label={t('post.uploadFile')}
                               accept="image/*,.pdf"
+                              className="!aspect-auto h-32 sm:h-36"
                             />
                           </motion.div>
                         )}
@@ -1057,6 +1065,8 @@ const CreatePostModal = ({
         </motion.div>
       </motion.div>
     </AnimatePresence>
+    ),
+    document.body
   );
 };
 

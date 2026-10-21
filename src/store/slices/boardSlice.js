@@ -1,9 +1,10 @@
 // src/store/slices/boardSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { boards as defaultBoards } from '../../data/boards';
 
-// ✅ الحالة الابتدائية - بيانات فقط
+// ✅ الحالة الابتدائية - بيانات افتراضية قابلة للاستبدال من API
 const initialState = {
-  boards: [],        // مصفوفة المجالس
+  boards: defaultBoards,
   loading: false,    // حالة التحميل
   error: null,       // حالة الأخطاء
 };

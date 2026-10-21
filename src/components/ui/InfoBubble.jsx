@@ -85,7 +85,7 @@ const InfoBubble = ({
               ${isDark ? 'text-red-400 hover:text-red-300' : 'text-red-400 hover:text-red-600'}
             `}
           >
-            حذف هذا القسم
+            {t('about.deleteSection')}
           </button>
         )}
       </div>

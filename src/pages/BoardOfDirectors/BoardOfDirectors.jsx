@@ -207,15 +207,11 @@ const BoardOfDirectors = () => {
                   key={board.id}
                   isAdmin={isAdmin}
                   onEdit={() => { setActiveBoard(board); setIsEditing(true); }}
-                  className="group relative rounded-[2.5rem] p-6 md:p-8 border shadow-soft hover:shadow-xl transition-all duration-500"
+                  className={`group relative overflow-hidden rounded-[2rem] border shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${isDark ? 'border-gray-700 bg-gray-800' : 'border-slate-200 bg-white'}`}
                   editButtonPosition="top-end"
                 >
-                  <div className={`
-                    ${isDark 
-                      ? 'bg-gray-800 border-gray-700 hover:border-brand-secondary/30' 
-                      : 'bg-white border-slate-100 hover:border-brand-secondary/20'
-                    }
-                  `}>
+                  <div className="relative">
+                    <div className="h-1.5 bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-primary" />
                     {/* أزرار الحذف (للمشرفين) */}
                     {isAdmin && (
                       <div className={`
@@ -240,14 +236,14 @@ const BoardOfDirectors = () => {
                     )}
 
                     {/* التخطيط الرئيسي */}
-                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    <div className="flex flex-col gap-0 lg:flex-row lg:items-stretch">
                       
                       {/* === قسم الصور === */}
-                      <div className="w-full lg:w-2/5 xl:w-1/3">
+                      <div className="w-full lg:w-2/5 xl:w-1/3 lg:border-e lg:border-slate-200 lg:dark:border-gray-700">
                         {(board.images?.length ?? 0) > 0 ? (
                           <div className={`
-                            rounded-[2rem] overflow-hidden shadow-md border aspect-[4/3] relative
-                            ${isDark ? 'border-gray-700 bg-gray-700' : 'border-slate-50 bg-white'}
+                            relative aspect-[4/3] overflow-hidden
+                            ${isDark ? 'bg-gray-700' : 'bg-slate-100'}
                           `}>
                             <ImageCarousel 
                               items={(board.images || []).map(img => ({ imageUrl: img }))} 
@@ -258,9 +254,9 @@ const BoardOfDirectors = () => {
                           </div>
                         ) : (
                           <div className={`
-                            w-full aspect-[4/3] rounded-[2rem] 
+                            w-full aspect-[4/3]
                             flex flex-col items-center justify-center 
-                            border-2 border-dashed
+                            border-b-2 border-dashed lg:border-b-0 lg:border-e-2
                             ${isDark ? 'bg-gray-700/30 border-gray-600 text-gray-500' : 'bg-slate-50 border-slate-200 text-slate-300'}
                           `}>
                             <FaImages size={30} className="mb-2" />
@@ -270,25 +266,29 @@ const BoardOfDirectors = () => {
                       </div>
 
                       {/* === قسم البيانات === */}
-                      <div className="flex-1 w-full space-y-6">
+                      <div className="w-full flex-1 space-y-7 p-6 md:p-8">
                         {/* رأس البطاقة */}
-                        <div className={`pb-4 border-b ${isDark ? 'border-gray-700' : 'border-slate-50'}`}>
-                          <Tag variant="accent" className="mb-3 px-4 py-1.5">
-                            <FaUsers className="inline me-1" /> {t(SITE_CONFIG.board.header.titleKey)}
-                          </Tag>
-                          <h2 className={`
-                            text-2xl md:text-3xl font-black tracking-tight leading-none mb-2
-                            ${isDark ? 'text-white' : 'text-slate-800'}
-                          `}>
-                            {getLocalizedText(board.year, currentLang)}
-                          </h2>
-                          <p className="text-brand-secondary font-bold text-sm">
-                            {getLocalizedText(board.period, currentLang)}
-                          </p>
+                        <div className="flex flex-wrap items-start justify-between gap-4 border-b pb-5 dark:border-gray-700">
+                          <div>
+                            <div className="mb-3 flex items-center gap-2">
+                              <Tag variant="accent" className="px-3 py-1.5">
+                                <FaUsers className="me-1" /> {t(SITE_CONFIG.board.header.titleKey)}
+                              </Tag>
+                              <span className="text-xs font-bold text-brand-secondary">
+                                {getLocalizedText(board.period, currentLang)}
+                              </span>
+                            </div>
+                            <h2 className={`text-2xl font-black tracking-tight md:text-3xl ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                              {getLocalizedText(board.year, currentLang)}
+                            </h2>
+                          </div>
+                          <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${isDark ? 'bg-brand-secondary/15 text-brand-secondary' : 'bg-brand-primary/10 text-brand-primary'}`}>
+                            <FaUsers size={20} />
+                          </div>
                         </div>
 
                         {/* شبكة المعلومات - باستخدام مكون مشترك قابل لإعادة الاستخدام */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                           {[
                             { label: SITE_CONFIG.board.labels.president, value: board.president, isMain: true },
                             { label: SITE_CONFIG.board.labels.vicePresident, value: board.vicePresident },
@@ -301,18 +301,17 @@ const BoardOfDirectors = () => {
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: i * 0.05 }}
                               className={`
-                                p-4 rounded-2xl border transition-all duration-200
+                                rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5
                                 ${isDark 
-                                  ? 'bg-gray-800/50 border-gray-700 hover:border-brand-secondary/50' 
-                                  : 'bg-slate-50/50 border-slate-100 hover:border-brand-secondary/30'
+                                  ? 'bg-gray-900/50 border-gray-700 hover:border-brand-secondary/50' 
+                                  : 'bg-slate-50 border-slate-100 hover:border-brand-secondary/30'
                                 }
                               `}
                             >
-                              <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.15em] mb-1">
+                              <p className={`mb-1 text-[10px] font-black uppercase tracking-[0.12em] ${isDark ? 'text-gray-500' : 'text-slate-400'}`}>
                                 {t(field.label)}
                               </p>
-                              <p className={`
-                                text-sm md:text-base font-bold transition-colors
+                              <p className={`text-sm font-bold transition-colors md:text-base
                                 ${field.isMain ? 'text-brand-secondary' : (isDark ? 'text-gray-200' : 'text-slate-700')}
                               `}>
                                 {getLocalizedText(field.value, currentLang) || '---'}
@@ -324,18 +323,19 @@ const BoardOfDirectors = () => {
                         {/* الأعضاء */}
                         {(board.members?.length ?? 0) > 0 && (
                           <div className="pt-4">
-                            <p className={`
-                              text-[9px] font-black uppercase tracking-widest mb-3
+                            <p className={`mb-3 text-[10px] font-black uppercase tracking-widest
                               ${isDark ? 'text-gray-500' : 'text-slate-400'}
                             `}>
                               {t(SITE_CONFIG.board.labels.members)}
                             </p>
-                            <div className="flex flex-wrap gap-2">
+                            <div className={`rounded-2xl border p-4 ${isDark ? 'border-gray-700 bg-gray-900/40' : 'border-slate-100 bg-slate-50/70'}`}>
+                              <div className="flex flex-wrap gap-2">
                               {(board.members || []).map((member, i) => (
                                 <Tag key={i} variant="accentSoft" className="px-4 py-1.5 text-sm rounded-lg shadow-sm">
                                   {getLocalizedText(member, currentLang)}
                                 </Tag>
                               ))}
+                              </div>
                             </div>
                           </div>
                         )}
@@ -380,12 +380,14 @@ const BoardOfDirectors = () => {
                   </h2>
                   <button 
                     onClick={() => setIsEditing(false)} 
+                    type="button"
+                    aria-label={t(SITE_CONFIG.board.actions.cancel)}
                     className={`
-                      p-2 rounded-xl transition-colors
+                      relative z-10 p-2 rounded-xl transition-colors
                       ${isDark ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'}
                     `}
                   >
-                     <FaEdit size={16} />
+                     <FaTimes size={16} />
                   </button>
                 </div>
                 
@@ -424,6 +426,7 @@ const BoardOfDirectors = () => {
   <LocalizedContentInput 
     label={t(SITE_CONFIG.board.labels.year)}
     value={activeBoard.year}
+    showBothLanguages={true}
     onChange={(val) => setActiveBoard(prev => ({ ...prev, year: val }))}
     placeholder={{ 
       ar: t('board.placeholders.year'), 
@@ -433,6 +436,7 @@ const BoardOfDirectors = () => {
   <LocalizedContentInput 
     label={t(SITE_CONFIG.board.labels.president)}
     value={activeBoard.president}
+    showBothLanguages={true}
     onChange={(val) => setActiveBoard(prev => ({ ...prev, president: val }))}
     placeholder={{ 
       ar: t('board.placeholders.president'), 
@@ -442,16 +446,19 @@ const BoardOfDirectors = () => {
   <LocalizedContentInput 
     label={t(SITE_CONFIG.board.labels.vicePresident)}
     value={activeBoard.vicePresident}
+    showBothLanguages={true}
     onChange={(val) => setActiveBoard(prev => ({ ...prev, vicePresident: val }))}
   />
   <LocalizedContentInput 
     label={t(SITE_CONFIG.board.labels.secretary)}
     value={activeBoard.secretary}
+    showBothLanguages={true}
     onChange={(val) => setActiveBoard(prev => ({ ...prev, secretary: val }))}
   />
   <LocalizedContentInput 
     label={t(SITE_CONFIG.board.labels.treasurer)}
     value={activeBoard.treasurer}
+    showBothLanguages={true}
     onChange={(val) => setActiveBoard(prev => ({ ...prev, treasurer: val }))}
   />
   

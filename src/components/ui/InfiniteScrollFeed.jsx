@@ -12,6 +12,11 @@ const InfiniteScrollFeed = ({ items, perPage = 10 }) => {
     setVisibleItems(items.slice(0, perPage * page))
   }, [items, page, perPage])
 
+  // إعادة البداية عند تغيّر نتائج البحث أو الفلترة
+  useEffect(() => {
+    setPage(1)
+  }, [items])
+
   // مراقبة آخر عنصر للتحميل التلقائي
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,17 +35,17 @@ const InfiniteScrollFeed = ({ items, perPage = 10 }) => {
 
   return (
     <div className="p-4">
-      {/* Masonry Layout */}
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+      {/* Masonry: كل بطاقة بارتفاعها الطبيعي مع ترتيب متوازن */}
+      <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
         <AnimatePresence>
           {visibleItems.map((item, index) => (
             <motion.div
-              key={index}
+              key={item.key || index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, delay: index * 0.03 }}
-              className="break-inside-avoid mb-6"
+              className="mb-6 min-w-0 break-inside-avoid"
             >
               {item}
             </motion.div>

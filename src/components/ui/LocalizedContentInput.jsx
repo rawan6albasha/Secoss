@@ -28,6 +28,7 @@ const LocalizedContentInput = ({
     en: 'Enter text...' 
   },
   showReorder = false, // 🔃 إظهار أزرار إعادة الترتيب (للمصفوفات فقط)
+  showBothLanguages = false, // 🌐 عرض حقلي العربية والإنجليزية دائماً
   className = '',     // 🎨 كلاسات Tailwind إضافية
   required = false,   // ⭐ هل الحقل مطلوب؟
 }) => {
@@ -87,7 +88,7 @@ const LocalizedContentInput = ({
       // أولاً: نجرب استخراج النص من اللغة المطلوبة
       const primary = val[lang];
       if (primary != null) {
-        if (typeof primary === 'string') return primary.trim();
+        if (typeof primary === 'string') return primary;
         // إذا كان الكائن متداخلاً، نعاود الاستدعاء بشكل تكراري
         if (typeof primary === 'object' && primary !== null) {
           return safeGetText(primary, lang);
@@ -99,7 +100,7 @@ const LocalizedContentInput = ({
       const other = lang === 'ar' ? 'en' : 'ar';
       const fallback = val[other];
       if (fallback != null) {
-        if (typeof fallback === 'string') return fallback.trim();
+        if (typeof fallback === 'string') return fallback;
         if (typeof fallback === 'object' && fallback !== null) {
           return safeGetText(fallback, lang);
         }
@@ -109,7 +110,7 @@ const LocalizedContentInput = ({
       // ثالثاً: نجرب أي قيمة متوفرة في الكائن
       const anyVal = Object.values(val).find(v => v != null);
       if (anyVal != null) {
-        if (typeof anyVal === 'string') return anyVal.trim();
+        if (typeof anyVal === 'string') return anyVal;
         if (typeof anyVal === 'object' && anyVal !== null) {
           return safeGetText(anyVal, lang);
         }
@@ -346,13 +347,30 @@ const LocalizedContentInput = ({
   // ============================================================================
   // 🎨 عرض المكون: وضع الحقول المفردة ('single')
   // ============================================================================
-  if (mode === 'single') {
+  if (mode === 'single' || mode === 'textarea') {
     const otherLang = currentLang === 'ar' ? 'en' : 'ar';
     // ضمان أن singleValue كائن { ar, en } وليس مصفوفة
     const singleValue = Array.isArray(normalizedValue) 
       ? (normalizedValue[0] || { ar: '', en: '' }) 
       : normalizedValue;
     
+    const renderLanguageField = (lang) => {
+      const fieldProps = {
+        value: singleValue[lang] || '',
+        onChange: (e) => handleSingleChange(lang, e.target.value),
+        placeholder: placeholder[lang],
+        className: `${inputClasses} ${lang === 'ar' ? 'text-right' : 'text-left'}`,
+        dir: lang === 'ar' ? 'rtl' : 'ltr',
+        lang,
+      };
+
+      return mode === 'textarea' ? (
+        <textarea {...fieldProps} rows={5} />
+      ) : (
+        <input {...fieldProps} type="text" />
+      );
+    };
+
     return (
       <div className={`space-y-4 ${className}`}>
         
@@ -369,17 +387,20 @@ const LocalizedContentInput = ({
               {langLabels[currentLang]} ✏️
             </span>
           </div>
-          <input
-            type="text"
-            value={singleValue[currentLang] || ''}
-            onChange={(e) => handleSingleChange(currentLang, e.target.value)}
-            placeholder={placeholder[currentLang]}
-            className={`${inputClasses} ${currentLang === 'ar' ? 'text-right' : 'text-left'}`}
-            dir={currentLang === 'ar' ? 'rtl' : 'ltr'}
-            lang={currentLang}
-          />
+          {renderLanguageField(currentLang)}
         </div>
         
+        {showBothLanguages ? (
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className={`text-[10px] font-bold ${isDark ? 'text-brand-secondary' : 'text-brand-primary'}`}>
+                {langLabels[otherLang]} ✏️
+              </span>
+            </div>
+            {renderLanguageField(otherLang)}
+          </div>
+        ) : (
+        <>
         {/* === الحقل الثانوي (اللغة الأخرى) - قابل للتعديل عند النقر === */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
@@ -468,6 +489,8 @@ const LocalizedContentInput = ({
         <p className={`text-[10px] italic ${isDark ? 'text-gray-500' : 'text-slate-400'}`}>
           💡 {t('localizedInput.note') || 'يمكنك إضافة النص باللغة الأخرى بالنقر على الحقل أعلاه'}
         </p>
+        </>
+        )}
       </div>
     );
   }

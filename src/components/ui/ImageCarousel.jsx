@@ -219,13 +219,14 @@ const ImageCarousel = ({
     >
       {/* === الشرائح === */}
       <div
-        className="flex transition-transform duration-700 ease-out h-full"
+        dir="ltr"
+        className="flex w-full h-full transition-transform duration-700 ease-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {items.map((item, idx) => (
           <div
             key={item.id || idx}
-            className="min-w-full h-full flex-shrink-0"
+            className="relative w-full min-w-full h-full flex-shrink-0"
             role="group"
             aria-roledescription="slide"
             aria-label={t('carousel.slideLabel', { current: idx + 1, total: items.length })}
@@ -276,7 +277,7 @@ const ImageCarousel = ({
 
       {/* === النقاط === */}
       {showDots && items.length > 1 && (
-        <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2">
+        <div className="absolute bottom-2   left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2">
           {items.map((_, idx) => (
             <button
               key={idx}

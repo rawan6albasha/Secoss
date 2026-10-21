@@ -1,5 +1,5 @@
 // src/pages/Lectures/Lectures.jsx
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,7 @@ import SearchInput from "../../components/ui/SearchInput";
 import SelectFilter from "../../components/ui/SelectFilter";
 
 // === Redux ===
-import { setFilter, clearFilters as clearReduxFilters } from "../../store/slices/lecturesSlice";
+import { clearFilters as clearReduxFilters } from "../../store/slices/lecturesSlice";
 import { useHasPermission } from "../../hooks/usePermission";
 
 const Lectures = () => {
@@ -47,29 +47,9 @@ const Lectures = () => {
   const [selectedYear, setSelectedYear] = useState(reduxFilters?.year || "");
   const [selectedSubCategory, setSelectedSubCategory] = useState(reduxFilters?.subCategory || "");
   const [selectedMainCategory, setSelectedMainCategory] = useState(reduxFilters?.category || "");
+  const syncingFromUrl = useRef(false);
 
-  // === 1️⃣ مزامنة: المحلية ←→ Redux (عند تغير المحلية، حدّث Redux) ===
-  useEffect(() => {
-    dispatch(setFilter({ key: "search", value: search }));
-  }, [search, dispatch]);
-
-  useEffect(() => {
-    dispatch(setFilter({ key: "speaker", value: selectedSpeaker }));
-  }, [selectedSpeaker, dispatch]);
-
-  useEffect(() => {
-    dispatch(setFilter({ key: "year", value: selectedYear }));
-  }, [selectedYear, dispatch]);
-
-  useEffect(() => {
-    dispatch(setFilter({ key: "subCategory", value: selectedSubCategory }));
-  }, [selectedSubCategory, dispatch]);
-
-  useEffect(() => {
-    dispatch(setFilter({ key: "category", value: selectedMainCategory }));
-  }, [selectedMainCategory, dispatch]);
-
-  // === 2️⃣ مزامنة: URL ←→ المحلية (عند تحميل الصفحة أو تغير الـ URL) ===
+  // === مزامنة URL مع الفلاتر المحلية ===
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     
@@ -85,10 +65,16 @@ const Lectures = () => {
     if (urlYear !== selectedYear) setSelectedYear(urlYear);
     if (urlCategory !== selectedMainCategory) setSelectedMainCategory(urlCategory);
     if (urlSubCategory !== selectedSubCategory) setSelectedSubCategory(urlSubCategory);
+    syncingFromUrl.current = true;
   }, [location.search]); // ← يعتمد فقط على تغير الـ URL
 
   // === 3️⃣ مزامنة: المحلية ←→ URL (عند تغير الفلاتر، حدّث الـ URL) ===
   useEffect(() => {
+    if (syncingFromUrl.current) {
+      syncingFromUrl.current = false;
+      return;
+    }
+
     const params = new URLSearchParams();
     
     if (search) params.set("search", search);
@@ -97,9 +83,11 @@ const Lectures = () => {
     if (selectedMainCategory) params.set("category", selectedMainCategory);
     if (selectedSubCategory) params.set("subCategory", selectedSubCategory);
     
-    // تحديث الـ URL دون إعادة تحميل الصفحة
-    navigate(`?${params.toString()}`, { replace: true });
-  }, [search, selectedSpeaker, selectedYear, selectedMainCategory, selectedSubCategory, navigate]);
+    if (params.toString() === location.search.replace(/^\?/, "")) return;
+
+    // تحديث query دون إسقاط مسار النشر أو إعادة تحميل الصفحة
+    setSearchParams(params, { replace: true });
+  }, [search, selectedSpeaker, selectedYear, selectedMainCategory, selectedSubCategory, location.search, setSearchParams]);
 
   // === فلترة آمنة: نعرض فقط المحاضرات المقبولة ===
   const approvedLectures = useMemo(() => {
@@ -113,7 +101,9 @@ const Lectures = () => {
   [approvedLectures]);
 
   const rawYears = useMemo(() => 
-    Array.from(new Set(approvedLectures.map((l) => l?.year))).filter(Boolean).sort((a, b) => b - a), 
+    Array.from(new Set(approvedLectures.map((l) => l?.year || l?.createdAt?.slice(0, 4))))
+      .filter(Boolean)
+      .sort((a, b) => Number(b) - Number(a)), 
   [approvedLectures]);
 
   const rawSubCategories = useMemo(() => 
@@ -165,16 +155,25 @@ const Lectures = () => {
 
   // === ✅ تطبيق الفلاتر على المحاضرات (مع جميع الاعتمادات) ===
   const filteredLectures = useMemo(() => {
+    const getSearchText = (value) => {
+      if (value == null) return '';
+      if (typeof value === 'object') return getLocalizedText(value, currentLang);
+      return String(value);
+    };
+
     return approvedLectures.filter((l) => {
       // البحث في العنوان والملخص
-      const matchesSearch = search 
-        ? (l?.title?.toLowerCase()?.includes(search.toLowerCase()) || 
-           l?.summary?.toLowerCase()?.includes(search.toLowerCase()))
+      const searchValue = search.toLowerCase().trim();
+      const matchesSearch = searchValue
+        ? [l?.title, l?.summary, l?.fullContent, l?.speaker, l?.category, l?.subCategory, ...(l?.tags || [])]
+            .map(getSearchText)
+            .some(value => value.toLowerCase().includes(searchValue))
         : true;
       
       // الفلاتر الأخرى
       const matchesSpeaker = selectedSpeaker ? l?.speaker === selectedSpeaker : true;
-      const matchesYear = selectedYear ? String(l?.year) === String(selectedYear) : true;
+      const lectureYear = l?.year || l?.createdAt?.slice(0, 4);
+      const matchesYear = selectedYear ? String(lectureYear) === String(selectedYear) : true;
       const matchesSubCat = selectedSubCategory ? l?.subCategory === selectedSubCategory : true;
       const matchesMainCat = selectedMainCategory ? l?.category === selectedMainCategory : true;
       
@@ -202,8 +201,8 @@ const Lectures = () => {
     dispatch(clearReduxFilters());
     
     // مسح الـ URL
-    navigate('?', { replace: true });
-  }, [dispatch, navigate]);
+    setSearchParams({}, { replace: true });
+  }, [dispatch, setSearchParams]);
 
   // === أنيميشن الحاوية ===
   const containerVariants = {
@@ -391,14 +390,15 @@ const Lectures = () => {
             {filteredLectures.length > 0 ? (
               <Pagination 
                 items={filteredLectures.map((lecture) => (
-                  <motion.div key={lecture?.id} variants={itemVariants}>
+                  <div key={lecture?.id}>
                     <LectureCard 
                       lecture={lecture}
                       isDark={isDark}
                     />
-                  </motion.div>
+                  </div>
                 ))} 
                 perPage={6} 
+                resetKey={`${search}-${selectedSpeaker}-${selectedYear}-${selectedMainCategory}-${selectedSubCategory}`}
                 className="w-full"
                 isDark={isDark}
               />

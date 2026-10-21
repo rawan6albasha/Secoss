@@ -70,7 +70,7 @@ const Card = ({
       >
         {/* === الصورة === */}
         {image && (
-          <div className="relative overflow-hidden aspect-video">
+          <div className={`relative overflow-hidden ${isNews ? '' : 'aspect-video'}`}>
             {!imgLoaded && (
               <div className={`absolute inset-0 animate-pulse ${isDark ? 'bg-gray-700' : 'bg-gray-200'}`} />
             )}
@@ -81,7 +81,7 @@ const Card = ({
               loading="lazy"
               onLoad={() => setImgLoaded(true)}
               className={`
-                w-full h-full object-cover transition-transform duration-500 
+                w-full ${isNews ? 'h-auto' : 'h-full object-cover'} transition-transform duration-500
                 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}
               `}
             />

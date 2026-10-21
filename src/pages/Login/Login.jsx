@@ -233,8 +233,8 @@ const Login = () => {
           </motion.button>
         </form>
 
-        {/* === خيارات المطور (تظهر فقط في التطوير) === */}
-        {import.meta.env.DEV && (
+        {/* === خيارات تسجيل الدخول السريع === */}
+        <>
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -277,7 +277,7 @@ const Login = () => {
               </p>
             </div>
           </motion.div>
-        )}
+        </>
         
         {/* === رابط التسجيل === */}
         <p className={`text-center text-sm font-bold ${isDark ? 'text-gray-400' : 'text-slate-400'}`}>

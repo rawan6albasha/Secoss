@@ -22,7 +22,7 @@ const ProfileBio = ({ bio, isEditing, onChange, isDark = false }) => {
       ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-slate-200'}
     `}>
       <h3 className={`text-lg font-bold mb-4 transition-colors ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
-        {t('profile.bio') || 'نبذة عني'}
+        {t('common.bio') || 'نبذة عني'}
       </h3>
       {isEditing ? (
         <textarea

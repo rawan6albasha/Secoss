@@ -97,7 +97,7 @@ const copyProfileLink = async () => {
               {!isEditing ? (
                 <Button variant="secondary" size="md" onClick={handleToggleEdit} className={`whitespace-nowrap ${isDark ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : ''}`}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                  <span className="hidden sm:inline">{t('profile.edit') }</span>
+                  <span className="hidden sm:inline">{t('common.edit') }</span>
                 </Button>
               ) : (
                 <Button variant="primary" size="md" onClick={handleSave} className="whitespace-nowrap">
@@ -110,7 +110,7 @@ const copyProfileLink = async () => {
               {canPublish && (
                 <Button variant="accent" size="md" onClick={onNewPost} className={`whitespace-nowrap ${isDark ? 'bg-brand-secondary text-white hover:bg-brand-secondaryHover' : ''}`}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                  <span className="hidden sm:inline">{t('profile.newPost') || 'جديد'}</span>
+                  <span className="hidden sm:inline">{t('post.newPost') || 'جديد'}</span>
                 </Button>
               )}
                        <Link 

@@ -101,7 +101,7 @@ export const SITE_CONFIG = {
         items: [
           { type: 'email', value: 'info@ses.org.sy', icon: '📧' },
           { type: 'phone', value: '+963 11 123 4567', icon: '📱' },
-          { type: 'address', value: 'دمشق، سوريا', icon: '📍' },
+          { type: 'address', value: 'footer.contact.location', icon: '📍' },
         ],
       },
     ],
